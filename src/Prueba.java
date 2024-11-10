@@ -5,4 +5,5 @@ public class Prueba {
 	int numero;
 	String comentario;
 	//otro comentario mas
+	int numero2;
 }
