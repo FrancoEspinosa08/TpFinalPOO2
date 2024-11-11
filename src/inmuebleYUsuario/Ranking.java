@@ -1,5 +1,5 @@
 package inmuebleYUsuario;
 
-public class Ranking {
+abstract class Ranking {
 
 }
