@@ -2,8 +2,10 @@ package buscador;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 
-import administrador.Categoria; 
+import administrador.Categoria;
+import nucleo.SitioWeb;
 import observer.Inmueble;
 
 public class Buscador {
@@ -11,11 +13,17 @@ public class Buscador {
 	private List<Inmueble> resultadoBusqueda; //Aca se almacena el resultado de cada busqueda
 	private Filtro filtro; // Filtro a aplicar en la busqueda
 	private SitioWeb sitioWeb;
-
+	
 	//Metodos
-	private List<Inmueble> getResultadoBusqueda();
-	private SitioWeb getSitioWeb();
+	
+	public List<Inmueble> getResultadoBusqueda() {
+		return resultadoBusqueda;
+	}
 
+	public SitioWeb getSitioWeb() {
+		return sitioWeb;
+	}
+	
 	public String visualizar(int index) { 
 	    // Visualiza los datos correspondientes al inmueble de la lista resultadoBusqueda[index]
 
@@ -45,7 +53,7 @@ public class Buscador {
 	           "Cantidad de veces que alquiló inmuebles: " + inmueble.getPropietario().cantidadTotalDeAlquileres() + "\n" +
 	           "Inmuebles Alquilados: " + this.tiposDeInmueblesEn(inmueble.getPropietario().getInmuebles()) + "\n";
 	}
-	
+
 	public String tiposDeInmueblesEn(List<Inmueble> inmuebles) { //contiene los tipos de inmuebles presentes en la lista inmuebles
 	    String resultado = "";	
 
