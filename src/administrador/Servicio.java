@@ -1,5 +1,5 @@
 package administrador;
 
-public enum servicio {
+public enum Servicio {
 
 }
