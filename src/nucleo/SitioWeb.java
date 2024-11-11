@@ -5,15 +5,16 @@ import java.util.List;
 
 import administrador.Configuracion;
 import buscador.Buscador;
+import inmuebleYUsuario.RankingUsuario;
 import observer.Inmueble;
 import observer.Usuario;
 
 public class SitioWeb {
 	
 	//Atributos
-	Sistema sistema;
-	Buscador buscador;
-	Configuracion configuracion;
+	private Sistema sistema;
+	private Buscador buscador;
+	private Configuracion configuracion;
 	
 	//Constructor
 	public SitioWeb(Sistema sistema, Buscador buscador, Configuracion configuracion) {
@@ -30,13 +31,13 @@ public class SitioWeb {
 		
 		usuario.setFechaDeInscripcion(this.getSistema().getFechaActual());
 		
-		//AL REGISTRAR EL USUARIO SE LE ASIGNA UN RANKING CON CATEGORIAS VALIDAS SEGUN LA CONFIGURACION!
-		// Ranking miRanking = new Ranking(configuracion.categoriaPropietario, configuracion.categoriaInquilino)
-		// usuario.setRanking(miRanking);
+		//Asignar al usuario un ranking con categorias actualizadas segun configuracion
+		RankingUsuario ranking = new RankingUsuario();
 		
-		//TODO: Realizar el test de este metodo
-		//TODO: Modificar los metodos de puntuar en checkOut para que puntuen sobre la lista de categorias
-		// correspondiente "las del propietario" o "las del inquilino" en ranking.
+		ranking.setCategoriasPropietario(this.getConfiguracion().getCategoriasPropietario());
+		ranking.setCategoriasInquilino(this.getConfiguracion().getCategoriasInquilino());
+		
+		usuario.setRanking(ranking);
 		
 		// Añade el usuario a usuariosRegistrados
 		this.getSistema().addUsuario(usuario);
@@ -58,7 +59,7 @@ public class SitioWeb {
 	}
 
 	//Validamos segun configuracion el tipo de inmueble
-	Boolean esTipoDeInmuebleValido(Inmueble inmueble){
+	public Boolean esTipoDeInmuebleValido(Inmueble inmueble){
 		
 		return this.getConfiguracion().getTipoDeInmuebles().stream()
 									  .anyMatch(tipo -> tipo.equals(inmueble.getTipoDeInmueble()));
@@ -68,7 +69,7 @@ public class SitioWeb {
 	}
 	
 	//Validamos segun configuracion los servicios del inmueble
-	Boolean tieneServiciosValidos(Inmueble inmueble){
+	public Boolean tieneServiciosValidos(Inmueble inmueble){
 		List<Servicio> serviciosInmueble = inmueble.getServicios();
 	    List<Servicio> serviciosValidos   = this.getConfiguracion().getServiciosValidos();
 		
@@ -77,7 +78,7 @@ public class SitioWeb {
 	}
 
 	//Reservar previo uso del buscador
-	void reservar(Usuario usuario, int index){ //Recibe el resultado de la busqueda del buscador (Atributo resultadoBusqueda) y reserva el inmueble que este en la posicion index.
+	public void reservar(Usuario usuario, int index){ //Recibe el resultado de la busqueda del buscador (Atributo resultadoBusqueda) y reserva el inmueble que este en la posicion index.
 		//OBS: el parametro usuario es EL inquilino que utiliza este metodo
 
 		Inmueble inmueble = this.getBuscador().getResultadoBusqueda().indexOf(index) // esto es el inmueble que se va a reservar
@@ -87,7 +88,7 @@ public class SitioWeb {
 	}
 
 	//Reservar si soy el siguiente en la lista de espera 
-	void reservar(Usuario usuario, Inmueble inmueble){
+	public void reservar(Usuario usuario, Inmueble inmueble){
 		
 		this.logicaDeReserva(inmueble,usuario);
 		
@@ -118,7 +119,7 @@ public class SitioWeb {
 
 	}
 	
-	List<Inmueble> obtenerTodasLasReservasDe(Usuario usuario){
+	public List<Inmueble> obtenerTodasLasReservasDe(Usuario usuario){
 		
 		return this.getSistema().getAltas().stream()
 						        .filter(inmueble -> inmueble.getInquilinoActivo().equals(usuario)) // Filtramos las reservas del inquilino puntual
@@ -126,7 +127,7 @@ public class SitioWeb {
 	}
 
 	
-	List<Inmueble> obtenerReservasFuturasDe(Usuario usuario){
+	public List<Inmueble> obtenerReservasFuturasDe(Usuario usuario){
 		
 		LocalDateTime fechaActual     = this.getSistema().getFechaActual();
 
@@ -137,13 +138,13 @@ public class SitioWeb {
 
 
 
-	boolean esFechaAnterior(LocalDateTime primerFecha, LocalDateTime segundaFecha){
+	public boolean esFechaAnterior(LocalDateTime primerFecha, LocalDateTime segundaFecha){
 
 		return primerFecha.isBefore(segundaFecha)
 	}
 
 	
-	List<Inmueble> obtenerReservasEnCiudad(Usuario usuario, String ciudad){
+	public List<Inmueble> obtenerReservasEnCiudad(Usuario usuario, String ciudad){
 		
 		return this.obtenerTodasLasReservasDe(usuario).stream()
 								         			  .filter(reserva -> reserva.getCiudad().equals(ciudad)) // Lista de reservas en una ciudad en particular
@@ -151,7 +152,7 @@ public class SitioWeb {
 	}
 
 
-	List<String> obtenerCiudadesConReservaDe(Usuario usuario){
+	public List<String> obtenerCiudadesConReservaDe(Usuario usuario){
 		
 		return this.obtenerTodasLasReservasDe(usuario).stream()
 								         		  	  .map(reserva -> reserva.getCiudad()) // Todas las ciudades donde tengo reservas
@@ -159,7 +160,7 @@ public class SitioWeb {
 	}
 
 	
-	void cancelarReserva(Inmueble reservaACancelar, LocalDateTime diaDeLaCancelacion){
+	public void cancelarReserva(Inmueble reservaACancelar, LocalDateTime diaDeLaCancelacion){
 		
 	       //PRECONDICION: El parametro diaDeLaCancelacion es la fecha actual. Sistema.getFechaActual();	
 
