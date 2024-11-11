@@ -8,13 +8,13 @@ import observer.Inmueble;
 
 public class Buscador {
 	//Atributos
-	List<Inmueble> resultadoBusqueda; //Aca se almacena el resultado de cada busqueda
-	Filtro filtro; // Filtro a aplicar en la busqueda
-	SitioWeb sitioWeb;
+	private List<Inmueble> resultadoBusqueda; //Aca se almacena el resultado de cada busqueda
+	private Filtro filtro; // Filtro a aplicar en la busqueda
+	private SitioWeb sitioWeb;
 
 	//Metodos
-	List<Inmueble> getResultadoBusqueda();
-	SitioWeb getSitioWeb();
+	private List<Inmueble> getResultadoBusqueda();
+	private SitioWeb getSitioWeb();
 
 	public String visualizar(int index) { 
 	    // Visualiza los datos correspondientes al inmueble de la lista resultadoBusqueda[index]
