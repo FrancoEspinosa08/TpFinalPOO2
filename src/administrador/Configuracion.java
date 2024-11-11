@@ -5,12 +5,12 @@ import java.util.List;
 public class Configuracion {
 	
 	//Atributos
-	List<Categoria> categoriasPropietario;
-	List<Categoria> categoriasInquilino;
-	List<Categoria> categoriasInmueble;
+	private List<Categoria> categoriasPropietario;
+	private List<Categoria> categoriasInquilino;
+	private List<Categoria> categoriasInmueble;
 	
-	List<String> tiposInmuebles;
-	List<Servicio> serviciosValidos;
+	private List<String> tiposInmuebles;
+	private List<Servicio> serviciosValidos;
 	 
 	public Configuracion(List<Categoria> categoriasPropietario, 
 						 List<Categoria> categoriasInquilino,
@@ -60,7 +60,7 @@ public class Configuracion {
 		 this.serviciosValidos = servicios;
 	}
 	
-	//TODO: Falta crear la clase tipoDeInmueble?? ver
+	
 	public List<String> getTipoInmuebles(){
 		return this.tiposInmuebles;
 	}
