@@ -1,5 +1,5 @@
 package inmuebleYUsuario;
 
-public abstract class Evento {
+public class Evento {
 
 }
