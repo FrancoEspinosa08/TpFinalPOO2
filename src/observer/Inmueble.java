@@ -33,7 +33,10 @@ public class Inmueble extends Subject implements IPuntuable {
 	private boolean esReservado;
 	private List<Evento> eventos;
 	
-	
+	public Usuario getPropietario() {
+		return propietario;
+	}
+
 	public Usuario getInquilinoActivo() {
 		return InquilinoActivo;
 	}
@@ -85,6 +88,14 @@ public class Inmueble extends Subject implements IPuntuable {
 		return tipoDeInmueble;
 	}
 
+	public String getCiudad() {
+		return ciudad;
+	}
+
+	public Ranking getRanking() {
+		return ranking;
+	}
+
 	public List<Servicio> getServicios() {
 		return servicios;
 	}
@@ -126,7 +137,7 @@ public class Inmueble extends Subject implements IPuntuable {
 	    this.vecesAlquilado += 1;
 	}
 	
-	public void AñadirComentario(String comentario) {
+	public void añadirComentario(String comentario) {
 	    comentarios.add(comentario);
 	}
 

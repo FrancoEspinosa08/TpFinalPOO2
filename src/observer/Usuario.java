@@ -33,6 +33,18 @@ public class Usuario implements IPropietario, IInquilino, IObserver {
 		this.fechaDeInscripcion = fechaDeInscripcion;
 	}
 	
+	public Ranking getRanking() {
+		return ranking;
+	}
+
+	public void setRanking(Ranking ranking) {
+		this.ranking = ranking;
+	}
+
+	public List<Inmueble> getInmuebles() {
+		return inmuebles;
+	}
+
 	public int getVecesQueAlquilo() {
 		return vecesQueAlquilo;
 	}
