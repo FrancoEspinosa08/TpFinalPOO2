@@ -24,7 +24,9 @@ public class Buscador {
 	public SitioWeb getSitioWeb() {
 		return sitioWeb;
 	}
-	
+	public Filtro getFiltro() {
+		return filtro;
+	}
 	public String visualizar(int index) { 
 	    // Visualiza los datos correspondientes al inmueble de la lista resultadoBusqueda[index]
 
@@ -41,15 +43,15 @@ public class Buscador {
 	           "Fecha de egreso: " + inmueble.getFechaCheckOut() + "\n" +
 	           "Precio: " + inmueble.getPrecioPorDia() + "\n" +      
 	           "Comentarios: " + inmueble.getComentarios() + "\n" + // Devuelve todos los comentarios del inmueble
-	           "Puntajes por categoria : " + this.puntajePorCategoria(inmueble, inmueble.getRanking().getCategorias()) + "\n" +
+	           "Puntajes por categoria : " + this.puntajePorCategoria(inmueble.getRanking().getCategorias()) + "\n" +
 	           "Promedio Total : " + inmueble.getRanking().promedioTotal(inmueble.getRanking().getCategorias()) + "\n" +
-	           "Promedio Por Categoria: " + this.promedioPorCategoria(inmueble, inmueble.getRanking().getCategorias()) + "\n" +
+	           "Promedio Por Categoria: " + this.promedioPorCategoria(inmueble.getRanking().getCategorias()) + "\n" +
 	           "<----------Informacion del dueño---------->" + "\n" +
 	           "Nombre: " + inmueble.getPropietario().getNombre() + "\n" +
 	           "Telefono: " + inmueble.getPropietario().getTelefono() + "\n" + 
 	           "Email: " + inmueble.getPropietario().getEmail() + "\n" +       
-	           "Puntajes por categoria : " + this.puntajePorCategoria(inmueble.getPropietario(), inmueble.getPropietario().getRanking().getCategoriasPropietario()) + "\n" +
-	           "Promedio por categoria: " + this.promedioPorCategoria(inmueble.getPropietario(), inmueble.getPropietario().getRanking().getCategoriasPropietario()) + "\n" +
+	           "Puntajes por categoria : " + this.puntajePorCategoria(inmueble.getPropietario().getRanking().getCategoriasPropietario()) + "\n" +
+	           "Promedio por categoria: " + this.promedioPorCategoria(inmueble.getPropietario().getRanking().getCategoriasPropietario()) + "\n" +
 	           "Antiguedad : " + this.antiguedad(inmueble.getPropietario().getFechaDeInscripcion(), LocalDateTime.now()) + "\n" +
 	           "Cantidad de veces se alquiló el inmueble: " + inmueble.getVecesAlquilado() + "\n" +
 	           "Cantidad de veces que alquiló inmuebles: " + inmueble.getPropietario().cantidadTotalDeAlquileres() + "\n" +
@@ -60,7 +62,7 @@ public class Buscador {
 	    String resultado = "";	
 
 	    for(Inmueble i : inmuebles) {
-	        resultado += i.getTipoInmueble() + "\n";
+	        resultado += i.getTipoDeInmueble() + "\n";
 	    }
 
 	    return resultado;
@@ -71,7 +73,7 @@ public class Buscador {
 		return 	ChronoUnit.DAYS.between(fechaAnterior, fechaActual);
 	}
 	
-	public String puntajePorCategoria(IPuntuable elemento, List<Categoria> categorias) { //contiene, para cada categoría, la cantidad de votos que tiene para cada puntaje. 
+	public String puntajePorCategoria(List<Categoria> categorias) { //contiene, para cada categoría, la cantidad de votos que tiene para cada puntaje. 
 	    String salida = "";
 	    
 	    for (Categoria c : categorias) {
@@ -86,7 +88,7 @@ public class Buscador {
 	    return salida;
 	}
 	
-	public String promedioPorCategoria(IPuntuable elemento, List<Categoria> categorias) { //muestra el nombre de cada categoría junto con su puntaje promedio
+	public String promedioPorCategoria(List<Categoria> categorias) { //muestra el nombre de cada categoría junto con su puntaje promedio
 	    String salida = "";
 
 	    for (Categoria c : categorias) {
