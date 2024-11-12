@@ -22,6 +22,14 @@ public class Usuario implements IPropietario, IInquilino, IObserver {
 	private int vecesQueAlquilo;
 	private AppMobile appMobile;
 	
+	public String getNombre() {
+		return nombre;
+	}
+
+	public String getTelefono() {
+		return telefono;
+	}
+
 	public Email getEmail() {
 		return email;
 	}
