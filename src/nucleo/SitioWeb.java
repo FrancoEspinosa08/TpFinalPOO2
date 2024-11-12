@@ -94,7 +94,8 @@ public class SitioWeb {
 		
 	}
 
-	
+	//La logica de reserva se encarga de manejar los controles
+	//necesarios antes de poder reservar un inmueble.
 	public void logicaDeReserva(Inmueble inmueble,Usuario usuario){
 
 		if(inmueble.esReservado()){

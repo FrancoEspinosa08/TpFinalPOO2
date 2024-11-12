@@ -11,7 +11,8 @@ public class Configuracion {
 	
 	private List<String> tiposInmuebles;
 	private List<Servicio> serviciosValidos;
-	 
+	
+	//Constructor
 	public Configuracion(List<Categoria> categoriasPropietario, 
 						 List<Categoria> categoriasInquilino,
 						 List<Categoria> categoriasInmueble,

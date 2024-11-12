@@ -23,7 +23,8 @@ public class Sistema {
 	
 	//Metodos
 	public void Actualizar() {
-
+		
+		
 		//Filtramos las reservas que esten vencidas y llamamos a checkOut() con cada una
 		//OBS: Se asume que este metodo se llama regularmente.	
 		this.getTodasLasReservas().stream() // Transformamos la lista de reservas en un stream
@@ -100,6 +101,12 @@ public class Sistema {
 	public LocalDateTime getFechaActual() {
 		 return this.fechaActual;
 	}
+	
+	//Permite setear la fecha para poder testear 
+	public void setFechaActual(LocalDateTime nuevaFecha) {
+		 this.fechaActual = nuevaFecha;
+	}
+	
 	
 	public List<Inmueble> getAltas(){
 		return this.altas;
