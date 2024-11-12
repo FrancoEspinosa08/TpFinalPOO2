@@ -36,6 +36,40 @@ public class Inmueble extends Subject implements IPuntuable {
 	private List<Evento> eventos;
 	private PoliticaDeCancelacion politicaDeCancelacion;
 	
+	
+	
+	
+	public Inmueble(Usuario propietario, Usuario inquilinoActivo, List<Usuario> usuariosEnEspera, int vecesAlquilado,
+			String tipoDeInmueble, int superficie, String pais, String ciudad, String direccion,
+			List<Servicio> servicios, int capacidad, List<String> fotos, LocalDateTime horarioCheckIn,
+			LocalDateTime horarioCheckOut, FormaDePago formaDePago, float precio, List<String> comentarios,
+			Ranking ranking, List<FormaDePago> formaPagoValidas, float precioPorDia, boolean esReservado,
+			List<Evento> eventos, PoliticaDeCancelacion politicaDeCancelacion) {
+		this.propietario = propietario;
+		InquilinoActivo = inquilinoActivo;
+		this.usuariosEnEspera = usuariosEnEspera;
+		this.vecesAlquilado = vecesAlquilado;
+		this.tipoDeInmueble = tipoDeInmueble;
+		this.superficie = superficie;
+		this.pais = pais;
+		this.ciudad = ciudad;
+		this.direccion = direccion;
+		this.servicios = servicios;
+		this.capacidad = capacidad;
+		this.fotos = fotos;
+		this.horarioCheckIn = horarioCheckIn;
+		this.horarioCheckOut = horarioCheckOut;
+		this.formaDePago = formaDePago;
+		this.precio = precio;
+		this.comentarios = comentarios;
+		this.ranking = ranking;
+		this.formaPagoValidas = formaPagoValidas;
+		this.precioPorDia = precioPorDia;
+		this.esReservado = esReservado;
+		this.eventos = eventos;
+		this.politicaDeCancelacion = politicaDeCancelacion;
+	}
+
 	public Usuario getPropietario() {
 		return propietario;
 	}

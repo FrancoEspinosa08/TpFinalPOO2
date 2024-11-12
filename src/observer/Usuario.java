@@ -23,6 +23,22 @@ public class Usuario implements IPropietario, IInquilino, IObserver {
 	private int vecesQueAlquilo;
 	private AppMobile appMobile;
 	
+	
+	
+	public Usuario(String nombre, String telefono, Email email, LocalDateTime fechaDeInscripcion,
+			RankingUsuario ranking, List<Inmueble> inmuebles, Comentario comentario, int vecesQueAlquilo,
+			AppMobile appMobile) {
+		this.nombre = nombre;
+		this.telefono = telefono;
+		this.email = email;
+		this.fechaDeInscripcion = fechaDeInscripcion;
+		this.ranking = ranking;
+		this.inmuebles = inmuebles;
+		this.comentario = comentario;
+		this.vecesQueAlquilo = vecesQueAlquilo;
+		this.appMobile = appMobile;
+	}
+
 	public String getNombre() {
 		return nombre;
 	}
