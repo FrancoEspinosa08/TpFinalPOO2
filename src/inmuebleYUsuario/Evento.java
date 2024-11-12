@@ -1,6 +1,7 @@
 package inmuebleYUsuario;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 public class Evento {
 	// Atributos
@@ -44,5 +45,13 @@ public class Evento {
 
 	public void setFechaInicio(LocalDateTime fechaInicio) {
 		this.fechaInicio = fechaInicio;
+	}
+	
+	public float calcularPrecioTotal(){
+	    return this.duracion() * this.getPrecioPorDia();
+	}
+
+	public long duracion(){
+		return ChronoUnit.DAYS.between(fechaInicio,fechaFin);
 	}
 }
