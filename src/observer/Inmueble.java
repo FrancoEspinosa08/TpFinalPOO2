@@ -5,8 +5,10 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import administrador.Servicio;
+import inmuebleYUsuario.Evento;
 import inmuebleYUsuario.FormaDePago;
 import inmuebleYUsuario.IPuntuable;
+import inmuebleYUsuario.Ranking;
 
 public class Inmueble extends Subject implements IPuntuable {
 	private Usuario propietario;
@@ -146,7 +148,7 @@ public class Inmueble extends Subject implements IPuntuable {
 	
 	public void notificarCancelacionReserva() {
 		for (IObserver observer : getObservers()) {
-			observer.actuaSiCancelaReserva(this);
+			observer.actuaSiCancelarReserva(this);
 		}
 	}
 	
