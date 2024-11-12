@@ -5,9 +5,14 @@ import observer.Inmueble;
 public class Email {
 	private String inbox;
     private Inmueble attachment;
+   
+    
+    public Email(String inbox, Inmueble attachment) {
+		this.inbox = inbox;
+		this.attachment = attachment;
+	}
 
-
-    public String getInbox() {
+	public String getInbox() {
         return inbox;
     }
 
