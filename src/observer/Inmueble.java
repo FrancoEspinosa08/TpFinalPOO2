@@ -27,7 +27,6 @@ public class Inmueble extends Subject implements IPuntuable {
 	private LocalDateTime horarioCheckIn;
 	private LocalDateTime horarioCheckOut;
 	private FormaDePago formaDePago;
-	private float precio;
 	private List<String> comentarios;
 	private Ranking ranking;
 	private List<FormaDePago> formaPagoValidas;
@@ -42,7 +41,7 @@ public class Inmueble extends Subject implements IPuntuable {
 	public Inmueble(Usuario propietario, Usuario inquilinoActivo, List<Usuario> usuariosEnEspera, int vecesAlquilado,
 			String tipoDeInmueble, int superficie, String pais, String ciudad, String direccion,
 			List<Servicio> servicios, int capacidad, List<String> fotos, LocalDateTime horarioCheckIn,
-			LocalDateTime horarioCheckOut, FormaDePago formaDePago, float precio, List<String> comentarios,
+			LocalDateTime horarioCheckOut, FormaDePago formaDePago, List<String> comentarios,
 			Ranking ranking, List<FormaDePago> formaPagoValidas, float precioPorDia, boolean esReservado,
 			List<Evento> eventos, PoliticaDeCancelacion politicaDeCancelacion) {
 		this.propietario = propietario;
@@ -60,7 +59,6 @@ public class Inmueble extends Subject implements IPuntuable {
 		this.horarioCheckIn = horarioCheckIn;
 		this.horarioCheckOut = horarioCheckOut;
 		this.formaDePago = formaDePago;
-		this.precio = precio;
 		this.comentarios = comentarios;
 		this.ranking = ranking;
 		this.formaPagoValidas = formaPagoValidas;
