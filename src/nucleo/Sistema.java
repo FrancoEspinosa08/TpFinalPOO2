@@ -60,6 +60,7 @@ public class Sistema {
 
 	public void puntuarInquilino(Usuario propietario,Usuario  inquilino) //El propietario puntua a un inquilino en todas las categorías
 	{
+		//TODO: VER RANKING!!!
 		inquilino.getRanking().getCategoriasInquilino().streams().forEach(categoria -> categoria.addPuntaje(propietario.puntuar()));
 	} 
 
