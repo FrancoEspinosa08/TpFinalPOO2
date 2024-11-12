@@ -38,4 +38,11 @@ public class FiltroPrecioMaximo extends Filtro {
                         .filter(inmueble -> inmueble.getPrecioTotal() <= precioMaximo) // Filtra por precio máximo
                         .toList();
     }
+
+	@Override
+	public List<Inmueble> filtro(String ciudad, LocalDateTime checkIn, LocalDateTime checkOut,
+			List<Inmueble> inmuebles) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

@@ -44,4 +44,10 @@ public class FiltroCompuesto extends Filtro {
 
         return resultado;
     }
+
+	@Override
+	public List<Inmueble> filtro(List<Inmueble> inmuebles) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

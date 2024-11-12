@@ -1,29 +1,25 @@
 package buscador;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import observer.Inmueble;
 
 public abstract class Filtro {
 
-    // Método que filtra los inmuebles según la ciudad, fecha de check-in y check-out
-    public List<Inmueble> filtrar(String ciudad, LocalDateTime checkIn, LocalDateTime checkOut, List<Inmueble> altas) {
-        List<Inmueble> resultado; 
+	public List<Inmueble> filtrar(String ciudad, LocalDateTime checkIn, LocalDateTime checkOut, List<Inmueble> altas) {
+        return this.filtrosObligatorios(ciudad, checkIn, checkOut, altas);
+    }
 
-        // Filtra los inmuebles por ciudad
-        resultado = this.filtroCiudad(ciudad, altas);
-
-        // Filtra los inmuebles por fecha de check-in
+    public List<Inmueble> filtrosObligatorios(String ciudad, LocalDateTime checkIn, LocalDateTime checkOut, List<Inmueble> inmuebles) {
+        List<Inmueble> resultado = this.filtroCiudad(ciudad, inmuebles);
         resultado = this.filtroCheckIn(checkIn, resultado);
-
-        // Filtra los inmuebles por fecha de check-out
         resultado = this.filtroCheckOut(checkOut, resultado);
-
         return resultado;
     }
 
     // Método abstracto que debe ser implementado por las clases que extiendan Filtro
     public abstract List<Inmueble> filtro(List<Inmueble> inmuebles);
-
+    public abstract List<Inmueble> filtro(String ciudad, LocalDateTime checkIn, LocalDateTime checkOut, List<Inmueble> inmuebles);
     // Filtra los inmuebles que están en la ciudad especificada
     List<Inmueble> filtroCiudad(String ciudad, List<Inmueble> inmuebles) {
         return inmuebles.stream()

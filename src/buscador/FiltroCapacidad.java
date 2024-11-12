@@ -38,4 +38,11 @@ public class FiltroCapacidad extends Filtro {
                         .filter(inmueble -> inmueble.getCapacidad() == capacidad) // Filtra por capacidad
                         .toList();
     }
+
+	@Override
+	public List<Inmueble> filtro(String ciudad, LocalDateTime checkIn, LocalDateTime checkOut,
+			List<Inmueble> inmuebles) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
