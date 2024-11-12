@@ -6,6 +6,8 @@ import java.util.List;
 import observer.Inmueble;
 import observer.Usuario;
 
+//Sistema principal
+
 public class Sistema {
 
 	//Atributos
