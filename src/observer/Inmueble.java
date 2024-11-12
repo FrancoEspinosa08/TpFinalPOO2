@@ -19,6 +19,7 @@ public class Inmueble extends Subject implements IPuntuable {
 	private int superficie;
 	private String pais;
 	private String ciudad;
+	private String direccion;
 	private List<Servicio> servicios;
 	private int capacidad;
 	private List<String> fotos;
@@ -88,8 +89,20 @@ public class Inmueble extends Subject implements IPuntuable {
 		return tipoDeInmueble;
 	}
 
+	public int getSuperficie() {
+		return superficie;
+	}
+
+	public String getPais() {
+		return pais;
+	}
+
 	public String getCiudad() {
 		return ciudad;
+	}
+
+	public String getDireccion() {
+		return direccion;
 	}
 
 	public Ranking getRanking() {
@@ -100,6 +113,14 @@ public class Inmueble extends Subject implements IPuntuable {
 		return servicios;
 	}
 	
+	public int getCapacidad() {
+		return capacidad;
+	}
+
+	public List<String> getFotos() {
+		return fotos;
+	}
+
 	public LocalDateTime getFechaCheckIn() {
 		return horarioCheckIn;
 	}
