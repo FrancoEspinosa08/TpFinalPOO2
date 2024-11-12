@@ -9,6 +9,7 @@ import inmuebleYUsuario.Evento;
 import inmuebleYUsuario.FormaDePago;
 import inmuebleYUsuario.IPuntuable;
 import inmuebleYUsuario.Ranking;
+import politicasDeCancelacion.PoliticaDeCancelacion;
 
 public class Inmueble extends Subject implements IPuntuable {
 	private Usuario propietario;
@@ -33,6 +34,7 @@ public class Inmueble extends Subject implements IPuntuable {
 	private float precioPorDia;
 	private boolean esReservado;
 	private List<Evento> eventos;
+	private PoliticaDeCancelacion politicaDeCancelacion;
 	
 	public Usuario getPropietario() {
 		return propietario;
@@ -62,6 +64,10 @@ public class Inmueble extends Subject implements IPuntuable {
 		this.formaDePago = formaDePago;
 	}
 	
+	public List<String> getComentarios() {
+		return comentarios;
+	}
+
 	public float getPrecioPorDia() {
 		return precioPorDia;
 	}
@@ -133,6 +139,14 @@ public class Inmueble extends Subject implements IPuntuable {
 		return eventos;
 	}
 	
+	public PoliticaDeCancelacion getPoliticaDeCancelacion() {
+		return politicaDeCancelacion;
+	}
+
+	public void setPoliticaDeCancelacion(PoliticaDeCancelacion politicaDeCancelacion) {
+		this.politicaDeCancelacion = politicaDeCancelacion;
+	}
+
 	public float getPrecioTotal() { 
         // Se calcula el precio total para el periodo entre checkIn y checkOut, incluyendo eventos.
 
