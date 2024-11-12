@@ -14,8 +14,8 @@ public abstract class Categoria {
         return puntaje;
     }
 
-    public void setPuntaje(List<Integer> puntaje) {
-        this.puntaje = puntaje;
+    public void addPuntaje(int punto) {
+        puntaje.add(punto);
     }
 
     public String getNombre() {

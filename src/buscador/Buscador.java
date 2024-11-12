@@ -28,7 +28,7 @@ public class Buscador {
 	    // Visualiza los datos correspondientes al inmueble de la lista resultadoBusqueda[index]
 
 	    Inmueble inmueble = resultadoBusqueda.get(index); // Obtiene el inmueble seleccionado
-	    return "Tipo de Inmueble : " + inmueble.getTipoInmueble() + "\n" +
+	    return "Tipo de Inmueble : " + inmueble.getTipoDeInmueble() + "\n" +
 	           "Superficie : " + inmueble.getSuperficie() + "\n" +
 	           "Pais: " + inmueble.getPais() + "\n" +
 	           "Ciudad: " + inmueble.getCiudad() + "\n" +
