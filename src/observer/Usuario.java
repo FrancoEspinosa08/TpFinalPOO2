@@ -10,13 +10,14 @@ import inmuebleYUsuario.FormaDePago;
 import inmuebleYUsuario.IInquilino;
 import inmuebleYUsuario.IPropietario;
 import inmuebleYUsuario.Ranking;
+import inmuebleYUsuario.RankingUsuario;
 
 public class Usuario implements IPropietario, IInquilino, IObserver {
 	private String nombre;
 	private String telefono;
 	private Email email;
 	private LocalDateTime fechaDeInscripcion;
-	private Ranking ranking;
+	private RankingUsuario ranking;
 	private List<Inmueble> inmuebles;
 	private Comentario comentario;
 	private int vecesQueAlquilo;
@@ -41,11 +42,11 @@ public class Usuario implements IPropietario, IInquilino, IObserver {
 		this.fechaDeInscripcion = fechaDeInscripcion;
 	}
 	
-	public Ranking getRanking() {
+	public RankingUsuario getRanking() {
 		return ranking;
 	}
 
-	public void setRanking(Ranking ranking) {
+	public void setRanking(RankingUsuario ranking) {
 		this.ranking = ranking;
 	}
 
