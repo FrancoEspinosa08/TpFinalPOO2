@@ -54,14 +54,13 @@ public class Sistema {
 
 	public void puntuarPropietario(Usuario propietario, Usuario inquilino)//El inquilino puntua a un propietario en todas las categorías
 	{ 
-		propietario.getRanking().getCategoriasPropietario().streams().forEach(categoria -> categoria.addPuntaje(inquilino.puntuar()));
+		propietario.getRanking().getCategoriasPropietario().stream().forEach(categoria -> categoria.addPuntaje(inquilino.puntuar()));
 	}
 
 
 	public void puntuarInquilino(Usuario propietario,Usuario  inquilino) //El propietario puntua a un inquilino en todas las categorías
 	{
-		//TODO: VER RANKING!!!
-		inquilino.getRanking().getCategoriasInquilino().streams().forEach(categoria -> categoria.addPuntaje(propietario.puntuar()));
+		inquilino.getRanking().getCategoriasInquilino().stream().forEach(categoria -> categoria.addPuntaje(propietario.puntuar()));
 	} 
 
 	public void añadirComentario(String comentario, Inmueble inmueble){ // comentario = inquilino.generarComentario() dentro del checkout
