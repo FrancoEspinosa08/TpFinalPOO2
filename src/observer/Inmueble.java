@@ -175,16 +175,6 @@ public class Inmueble extends Subject implements IPuntuable {
 	public void añadirComentario(String comentario) {
 	    comentarios.add(comentario);
 	}
-
-	@Override
-	public void attach(IObserver observer) {
-		this.observers.add(observer);
-	}
-	
-	@Override
-	public void detach(IObserver observer) {
-		this.observers.remove(observer);
-	}
 	
 	public void notificarBajaDePrecio() {
 		for (IObserver observer : getObservers()) {
