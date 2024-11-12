@@ -34,7 +34,7 @@ public abstract class Categoria {
         return (double) suma / puntaje.size();
         }
     }
-    int cantidadQuePuntuaronCon(int puntaje){
+    public int cantidadQuePuntuaronCon(int puntaje){
     	return this.getPuntaje().stream().filter(p -> p == puntaje).mapToInt(Integer::intValue).sum();
     }
 }

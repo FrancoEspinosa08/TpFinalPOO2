@@ -5,6 +5,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import administrador.Categoria;
+import inmuebleYUsuario.IPuntuable;
 import nucleo.SitioWeb;
 import observer.Inmueble;
 
@@ -36,10 +37,11 @@ public class Buscador {
 	           "Servicios: " + inmueble.getServicios() + "\n" +  
 	           "Capacidad: " + inmueble.getCapacidad() + "\n" +  
 	           "Fotos: " + inmueble.getFotos() + "\n" +         
-	           "Horarios: " + inmueble.getHorarios() + "\n" +   
-	           "Precio: " + inmueble.getPrecio() + "\n" +      
+	           "Fecha de ingreso: " + inmueble.getFechaCheckIn() + "\n" +
+	           "Fecha de egreso: " + inmueble.getFechaCheckOut() + "\n" +
+	           "Precio: " + inmueble.getPrecioPorDia() + "\n" +      
 	           "Comentarios: " + inmueble.getComentarios() + "\n" + // Devuelve todos los comentarios del inmueble
-	           "Puntajes por categoria : " + this.puntajesPorCategoria(inmueble, inmueble.getRanking().getCategorias()) + "\n" +
+	           "Puntajes por categoria : " + this.puntajePorCategoria(inmueble, inmueble.getRanking().getCategorias()) + "\n" +
 	           "Promedio Total : " + inmueble.getRanking().promedioTotal(inmueble.getRanking().getCategorias()) + "\n" +
 	           "Promedio Por Categoria: " + this.promedioPorCategoria(inmueble, inmueble.getRanking().getCategorias()) + "\n" +
 	           "<----------Informacion del dueño---------->" + "\n" +
@@ -69,7 +71,7 @@ public class Buscador {
 		return 	ChronoUnit.DAYS.between(fechaAnterior, fechaActual);
 	}
 	
-	public String puntajePorCategoria(Puntuable elemento, List<Categoria> categorias) { //contiene, para cada categoría, la cantidad de votos que tiene para cada puntaje. 
+	public String puntajePorCategoria(IPuntuable elemento, List<Categoria> categorias) { //contiene, para cada categoría, la cantidad de votos que tiene para cada puntaje. 
 	    String salida = "";
 	    
 	    for (Categoria c : categorias) {
@@ -84,7 +86,7 @@ public class Buscador {
 	    return salida;
 	}
 	
-	public String promedioPorCategoria(Puntuable elemento, List<Categoria> categorias) { //muestra el nombre de cada categoría junto con su puntaje promedio
+	public String promedioPorCategoria(IPuntuable elemento, List<Categoria> categorias) { //muestra el nombre de cada categoría junto con su puntaje promedio
 	    String salida = "";
 
 	    for (Categoria c : categorias) {
