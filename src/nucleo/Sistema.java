@@ -1,8 +1,10 @@
 package nucleo;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
 
+import administrador.Categoria;
 import observer.Inmueble;
 import observer.Usuario;
 
@@ -47,18 +49,18 @@ public class Sistema {
 
 	public void puntuarInmueble(Inmueble inmueble, Usuario usuario) //El inquilino puntua un inmueble en todas las categorías
 	{
-		inmueble.getRanking().getCategorias().streams().forEach(c-> c.setPuntaje(usuario.puntuar()));	
+		inmueble.getRanking().getCategorias().stream().forEach(c-> c.addPuntaje(usuario.puntuar()));	
 	}
 
 	public void puntuarPropietario(Usuario propietario, Usuario inquilino)//El inquilino puntua a un propietario en todas las categorías
 	{ 
-		propietario.getRanking().getCategoriasPropietario().streams().forEach(categoria -> categoria.setPuntaje(inquilino.puntuar()));
+		propietario.getRanking().getCategoriasPropietario().streams().forEach(categoria -> categoria.addPuntaje(inquilino.puntuar()));
 	}
 
 
 	public void puntuarInquilino(Usuario propietario,Usuario  inquilino) //El propietario puntua a un inquilino en todas las categorías
 	{
-		inquilino.getRanking().getCategoriasInquilino().streams().forEach(categoria -> categoria.setPuntaje(propietario.puntuar()));
+		inquilino.getRanking().getCategoriasInquilino().streams().forEach(categoria -> categoria.addPuntaje(propietario.puntuar()));
 	} 
 
 	public void añadirComentario(String comentario, Inmueble inmueble){ // comentario = inquilino.generarComentario() dentro del checkout
@@ -95,6 +97,9 @@ public class Sistema {
 		this.getAltas().add(inmueble);
 	}
 	
+	public void addUsuario(Usuario usuario) {
+		this.usuariosRegistrados.add(usuario);
+	}
 	
 	//Getters and Setters
 	
@@ -110,6 +115,10 @@ public class Sistema {
 	
 	public List<Inmueble> getAltas(){
 		return this.altas;
+	}
+
+	public List<Usuario> getUsuariosRegistrados() {
+		return this.usuariosRegistrados;
 	}
 	
 	

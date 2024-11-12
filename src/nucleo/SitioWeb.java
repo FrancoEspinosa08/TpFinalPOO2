@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import administrador.Configuracion;
+import administrador.Servicio;
 import buscador.Buscador;
 import inmuebleYUsuario.RankingUsuario;
 import observer.Inmueble;
@@ -15,6 +16,7 @@ public class SitioWeb {
 	private Sistema sistema;
 	private Buscador buscador;
 	private Configuracion configuracion;
+	
 	
 	//Constructor
 	public SitioWeb(Sistema sistema, Buscador buscador, Configuracion configuracion) {
@@ -32,11 +34,8 @@ public class SitioWeb {
 		usuario.setFechaDeInscripcion(this.getSistema().getFechaActual());
 		
 		//Asignar al usuario un ranking con categorias actualizadas segun configuracion
-		RankingUsuario ranking = new RankingUsuario();
-		
-		ranking.setCategoriasPropietario(this.getConfiguracion().getCategoriasPropietario());
-		ranking.setCategoriasInquilino(this.getConfiguracion().getCategoriasInquilino());
-		
+		RankingUsuario ranking = new RankingUsuario(this.getConfiguracion().getCategoriasInquilinos(),
+													this.getConfiguracion().getCategoriasPropietario());
 		usuario.setRanking(ranking);
 		
 		// Añade el usuario a usuariosRegistrados
@@ -61,7 +60,7 @@ public class SitioWeb {
 	//Validamos segun configuracion el tipo de inmueble
 	public Boolean esTipoDeInmuebleValido(Inmueble inmueble){
 		
-		return this.getConfiguracion().getTipoDeInmuebles().stream()
+		return this.getConfiguracion().getTipoInmuebles().stream()
 									  .anyMatch(tipo -> tipo.equals(inmueble.getTipoDeInmueble()));
 		
 		
@@ -81,7 +80,7 @@ public class SitioWeb {
 	public void reservar(Usuario usuario, int index){ //Recibe el resultado de la busqueda del buscador (Atributo resultadoBusqueda) y reserva el inmueble que este en la posicion index.
 		//OBS: el parametro usuario es EL inquilino que utiliza este metodo
 
-		Inmueble inmueble = this.getBuscador().getResultadoBusqueda().indexOf(index) // esto es el inmueble que se va a reservar
+		Inmueble inmueble = this.getBuscador().getResultadoBusqueda().get(index); // esto es el inmueble que se va a reservar
 
 		this.logicaDeReserva(inmueble,usuario);
 				
@@ -98,16 +97,16 @@ public class SitioWeb {
 	//necesarios antes de poder reservar un inmueble.
 	public void logicaDeReserva(Inmueble inmueble,Usuario usuario){
 
-		if(inmueble.esReservado()){
+		if(inmueble.getEsReservado()){
 		     inmueble.encolarUsuario(usuario);
 		}
-		else if (inmueble.getPropietario().decidirSiReservar()){//True si el propietario decide hacer la reserva
+		else if (inmueble.getPropietario().decidirSiReserva()){//True si el propietario decide hacer la reserva
 			
 	            //En caso de aprobarse la reserva se añade al manager
 			inmueble.setInquilinoActivo(usuario); //Seteamos el usuario que alquila
-			inmueble.setFormaDePago(usuario.seleccionarFormaDePago()) // Seteamos la forma de pago seleccionada por el usuario
+			inmueble.setFormaDePago(usuario.seleccionarFormaDePago()); // Seteamos la forma de pago seleccionada por el usuario
 			inmueble.setEsReservado(true); 
-			usuario.getEmail().setInbox(“Su reserva fue aprobada!”); // Se envia mail de aviso al inquilino
+			usuario.getEmail().setInbox("Su reserva fue aprobada!"); // Se envia mail de aviso al inquilino
 
 			//Notificamos a los interesados sobre la realizacion de la reserva
 			inmueble.notificarSeHaceReserva();
@@ -132,7 +131,7 @@ public class SitioWeb {
 		
 		LocalDateTime fechaActual     = this.getSistema().getFechaActual();
 
-		return this.obtenerTodasLasReservaDe(usuario).stream()
+		return this.obtenerTodasLasReservasDe(usuario).stream()
 												     .filter(reserva -> esFechaAnterior(fechaActual , reserva.getFechaCheckIn() ) )//aca estamos comparando si la fecha actual es anterior a la del checkIn
 												     .toList();
 	}
@@ -141,7 +140,7 @@ public class SitioWeb {
 
 	public boolean esFechaAnterior(LocalDateTime primerFecha, LocalDateTime segundaFecha){
 
-		return primerFecha.isBefore(segundaFecha)
+		return primerFecha.isBefore(segundaFecha);
 	}
 
 	
@@ -167,7 +166,7 @@ public class SitioWeb {
 
 	       //PRECONDICION: Este metodo es llamado por un inquilino para cancelar una reserva propia, no puede cancelar reservas de otros inquinos.
 		
-	       reservaACancelar.getPropietario().getEmail().setInbox(“Se ha cancelado la reserva!”, reservaACancelar); // Enviamos mail para notificar al propietario de la cancelacion
+	       reservaACancelar.getPropietario().getEmail().setInbox("Se ha cancelado la reserva!", reservaACancelar); // Enviamos mail para notificar al propietario de la cancelacion
 	    
 
 	     //Notifico de la cancelacion del inmueble a los interesados
@@ -176,9 +175,9 @@ public class SitioWeb {
 	     //Cancelar reserva aplicando politica de cancelacion correspondiente.
 	     reservaACancelar.getPoliticaDeCancelacion().aplicarPenalidad(reservaACancelar, diaDeLaCancelacion);	
 
-	     reservaACancelar.setInquilinoActivo(NULL);
+	     reservaACancelar.setInquilinoActivo(null);
 	     
-	     this.reservar(reservaACancelar.getUsuariosEnEspera().indexOf(0) , reservaACancelar )
+	     this.reservar(reservaACancelar.getUsuariosEnEspera().getFirst() , reservaACancelar );
 	}
 
 	
