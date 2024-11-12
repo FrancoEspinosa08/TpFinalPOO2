@@ -7,9 +7,7 @@ public class Email {
     private Inmueble attachment;
    
     
-    public Email(String inbox, Inmueble attachment) {
-		this.inbox = inbox;
-		this.attachment = attachment;
+    public Email() {
 	}
 
 	public String getInbox() {
