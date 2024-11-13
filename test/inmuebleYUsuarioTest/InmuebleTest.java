@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import administrador.Servicio;
+import inmuebleYUsuario.Comentario;
 import inmuebleYUsuario.Evento;
 import inmuebleYUsuario.FormaDePago;
 import inmuebleYUsuario.Ranking;
@@ -36,6 +37,7 @@ class InmuebleTest {
     private List<FormaDePago> formaPagoValidas;
     private List<Evento> eventos;
     private PoliticaDeCancelacion politicaDeCancelacion;
+    private Comentario comentario;
 	
 	
     @BeforeEach
@@ -48,12 +50,15 @@ class InmuebleTest {
         checkIn = LocalDateTime.of(2024, 1, 1, 9, 0);
         checkOut = LocalDateTime.of(2024, 1, 17, 9, 0);
         formaDePago = FormaDePago.EFECTIVO;
-        comentarios = Arrays.asList("Comentario 1", "Comentario 2", "Comentario 3", "Comentario 4", "Comentario 5");
         ranking = Mockito.mock(Ranking.class);
         formaPagoValidas = Arrays.asList(FormaDePago.EFECTIVO, FormaDePago.TARJETADEBITO);
         eventos = Arrays.asList(Mockito.mock(Evento.class), Mockito.mock(Evento.class));
         politicaDeCancelacion = Mockito.mock(PoliticaDeCancelacion.class);
 
+        // Inicializa la lista de comentarios antes de crear el objeto Comentario
+        comentarios = new ArrayList<>(Arrays.asList("Comentario 1", "Comentario 2", "Comentario 3", "Comentario 4", "Comentario 5"));
+        comentario = new Comentario(comentarios);
+        
         // Crear la instancia de Inmueble.
         inmueble = new Inmueble(propietario, inquilinoActivo, 0, "Apartamento", 50,
                                 "Argentina", "Buenos Aires", "Azopardo 250", 4, fotos, checkIn, checkOut,
@@ -67,6 +72,36 @@ class InmuebleTest {
         assertEquals(0, inmueble.getUsuariosEnEspera().size());
         assertEquals(2, inmueble.getEventos().size());
     }
+    
+    @Test
+    public void testGetCapacidad() {
+        assertEquals(4, inmueble.getCapacidad());
+    }
+
+    @Test
+    public void testGetPais() {
+        assertEquals("Argentina", inmueble.getPais());
+    }
+
+    @Test
+    public void testGetCiudad() {
+        assertEquals("Buenos Aires", inmueble.getCiudad());
+    }
+
+    @Test
+    public void testGetDireccion() {
+        assertEquals("Azopardo 250", inmueble.getDireccion());
+    }
+    
+    @Test
+    public void testGetHorarioCheckIn() {
+        assertEquals(checkIn, inmueble.getFechaCheckIn());
+    }
+
+    @Test
+    public void testGetHorarioCheckOut() {
+        assertEquals(checkOut, inmueble.getFechaCheckOut());
+    } 
     
     @Test
     public void testPrecioPorDia() {
@@ -124,4 +159,31 @@ class InmuebleTest {
         float precioTotal = inmueble.getPrecioTotal();
         assertEquals(1380.0f, precioTotal, 0.001f);
     }
+    
+    public void testSetInquilinoActivo() {
+        Usuario nuevoInquilino = Mockito.mock(Usuario.class);
+        inmueble.setInquilinoActivo(nuevoInquilino);
+        assertEquals(nuevoInquilino, inmueble.getInquilinoActivo());
+    }
+    
+    @Test
+    public void testGetComentarios() {
+        assertEquals(comentarios, inmueble.getComentarios());
+    }
+    
+    
+    @Test
+    public void testAñadirComentario() {
+        String nuevoComentario = "Excelente experiencia";
+        inmueble.añadirComentario(nuevoComentario);
+        assertTrue(inmueble.getComentarios().contains(nuevoComentario));
+    }
+    
+    @Test
+    public void testSetFormaDePago() {
+        FormaDePago nuevaFormaDePago = FormaDePago.TARJETACREDITO;
+        inmueble.setFormaDePago(nuevaFormaDePago);
+        assertEquals(nuevaFormaDePago, inmueble.getFormaDePago());
+    }
+    
 }
