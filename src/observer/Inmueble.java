@@ -84,8 +84,13 @@ public class Inmueble extends Subject {
 		this.usuariosEnEspera = usuariosEnEspera;
 	}
 	
-	public FormaDePago getFormasDePago() {
+	public FormaDePago getFormaDePago() {
 		return formaDePago;
+	}
+	
+	
+	public List<FormaDePago> getFormasDePago() {
+		return formaPagoValidas;
 	}
 	
 	public void setFormaDePago(FormaDePago formaDePago) {
