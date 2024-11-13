@@ -23,6 +23,22 @@ public class Usuario implements IPropietario, IInquilino, IObserver {
 	private int vecesQueAlquilo;
 	private AppMobile appMobile;
 	
+	
+	
+	public Usuario(String nombre, String telefono, Email email, LocalDateTime fechaDeInscripcion,
+			RankingUsuario ranking, List<Inmueble> inmuebles, Comentario comentario, int vecesQueAlquilo,
+			AppMobile appMobile) {
+		this.nombre = nombre;
+		this.telefono = telefono;
+		this.email = email;
+		this.fechaDeInscripcion = fechaDeInscripcion;
+		this.ranking = ranking;
+		this.inmuebles = inmuebles;
+		this.comentario = comentario;
+		this.vecesQueAlquilo = vecesQueAlquilo;
+		this.appMobile = appMobile;
+	}
+
 	public String getNombre() {
 		return nombre;
 	}
@@ -84,15 +100,14 @@ public class Usuario implements IPropietario, IInquilino, IObserver {
 		List<String> listaComentarios = comentario.getCometarios();
         
         Random random = new Random();
-        int indiceAleatorio = random.nextInt(listaComentarios.size()); // Índice aleatorio en el rango de la lista
+        int indiceAleatorio = random.nextInt(listaComentarios.size()); //  Índice aleatorio en el rango de la lista
         return listaComentarios.get(indiceAleatorio);                  // Devuelve el comentario aleatorio
 	}
 
 	@Override
-	public FormaDePago seleccionarFormaDePago() {
-		FormaDePago[] formas = FormaDePago.values();                 // Obtiene todas las opciones del enum
-        int indiceAleatorio = (int) (Math.random() * formas.length); // Genera un índice aleatorio
-        return formas[indiceAleatorio];                              // Devuelve una forma de pago aleatoria
+	public FormaDePago seleccionarFormaDePago(List<FormaDePago> formas) {
+	    int indiceAleatorio = (int) (Math.random() * formas.size()); // Genera un índice aleatorio
+	    return formas.get(indiceAleatorio);                          // Devuelve una forma de pago aleatoria
 	}
 
 	@Override
@@ -115,4 +130,5 @@ public class Usuario implements IPropietario, IInquilino, IObserver {
 	public void actuaSiSeReserva() {
 		// Sin implementación
 	}
+
 }

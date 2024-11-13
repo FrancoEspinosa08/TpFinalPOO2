@@ -1,6 +1,8 @@
 package inmuebleYUsuario;
 
-public interface IInquilino {
+import java.util.List;
 
-	public FormaDePago seleccionarFormaDePago();
+public interface IInquilino {
+	//
+	public FormaDePago seleccionarFormaDePago(List<FormaDePago> formas);
 }
