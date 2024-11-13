@@ -12,8 +12,13 @@ public abstract class Ranking {
     		    .flatMap(cat -> cat.getPuntaje().stream()) // Aplanar todas las listas en un solo flujo de Integer
     		    .mapToInt(Integer::intValue)               // Convertir cada Integer a int
     		    .sum();                                    // Sumar todos los valores
-    	int tamaño   = categorias.size();
-    	return puntajeTotal / tamaño;
+    	
+    	// Contamos el número total de puntajes en todas las categorías
+        long totalPuntajes = categorias.stream()
+                .flatMap(cat -> cat.getPuntaje().stream()) 
+                .count();
+        
+    	return puntajeTotal / totalPuntajes;
     }
     // Constructor
     public Ranking() {
