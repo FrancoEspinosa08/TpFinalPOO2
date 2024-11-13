@@ -10,7 +10,9 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.NoSuchElementException;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -160,11 +162,11 @@ class SitioWebTest {
 		//Configuracion inmuebleReal
 		inmuebleReal.attach(Agustin); //Agustin sera observer
 		inmuebleReal.setServicios(serviciosCasa);
-		
+	 	
 		doNothing().when(Agustin).actuaSiSeReserva(); //El observer no hace nada al ser notificado
 	}
 	
-	/*@Test
+	@Test
 	void testCancelarReserva() {
 		
 		Inmueble inmueble = new Inmueble(Ivan, null, 0, "casa",200,
@@ -179,14 +181,18 @@ class SitioWebTest {
 		doNothing().when(Franco).actuaSiCancelarReserva(inmueble);
 		doNothing().when(Agustin).actuaSiCancelarReserva(inmueble);
 		
-		sitioWeb.cancelarReserva(inmueble , LocalDateTime.now());
+		// Verifica que se lance una NoSuchElementException cuando se intenta cancelar una reserva en una lista vacía
+        Assertions.assertThrows(NoSuchElementException.class, () -> {
+        	sitioWeb.cancelarReserva(inmueble , LocalDateTime.now());
+        });
+		
 		
 		
 		assertEquals("Se ha cancelado la reserva!" , Ivan.getEmail().getInbox());
 		assertEquals(inmueble ,Ivan.getEmail().getAttachment());
 		
-		
-	}*/
+	
+	}
 	
 	
 	@Test
@@ -201,9 +207,9 @@ class SitioWebTest {
 		
 		sitioWeb.registrar(Ivan);
 		
-		verify(sistema).addUsuario(Ivan);
+	 	verify(sistema).addUsuario(Ivan);
 	}
-	
+	 
 	
 	@Test
 	void testEncolarUsuarioSiElInmuebleEstaReservado() {

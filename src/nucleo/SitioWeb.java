@@ -177,6 +177,7 @@ public class SitioWeb {
 
 	     reservaACancelar.setInquilinoActivo(null);
 	     
+	     //Pasa a reservar el siguiente usuario en la lista de espera
 	     this.reservar(reservaACancelar.getUsuariosEnEspera().getFirst() , reservaACancelar );
 	}
 
@@ -206,10 +207,10 @@ public class SitioWeb {
 
 	public double tasaDeOcupacion(){ // inmuebles alquilados sobre total de inmuebles
 		
-		   long totalDeInmuebles 			= this.getSistema().getAltas().size();
-		   long cantidadInmueblesAlquilados = this.getSistema().getAltas().stream().filter(inmueble -> inmueble.getEsReservado()).count();
+		   double totalDeInmuebles 			  = this.getSistema().getAltas().size();
+		   double cantidadInmueblesAlquilados = this.getSistema().getAltas().stream().filter(inmueble -> inmueble.getEsReservado()).count();
 
-		return (double) cantidadInmueblesAlquilados / totalDeInmuebles;
+		return  cantidadInmueblesAlquilados / totalDeInmuebles;
 
 	}
 

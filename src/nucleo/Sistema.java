@@ -1,6 +1,7 @@
 package nucleo;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -13,8 +14,8 @@ import observer.Usuario;
 public class Sistema {
 
 	//Atributos
-	private List<Usuario> usuariosRegistrados; //Lista de usuarios registrados en el sistema
-	private List<Inmueble> altas;
+	private List<Usuario> usuariosRegistrados= new ArrayList<>(); //Lista de usuarios registrados en el sistema
+	private List<Inmueble> altas = new ArrayList<>();
 	private LocalDateTime fechaActual = LocalDateTime.now();
 
 	
