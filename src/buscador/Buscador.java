@@ -5,7 +5,6 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import administrador.Categoria;
-import inmuebleYUsuario.IPuntuable;
 import nucleo.SitioWeb;
 import observer.Inmueble;
 
@@ -17,8 +16,16 @@ public class Buscador {
 	
 	//Metodos
 	
+	
 	public List<Inmueble> getResultadoBusqueda() {
 		return resultadoBusqueda;
+	}
+
+	public Buscador(List<Inmueble> resultadoBusqueda, Filtro filtro, SitioWeb sitioWeb) {
+		super();
+		this.resultadoBusqueda = resultadoBusqueda;
+		this.filtro = filtro;
+		this.sitioWeb = sitioWeb;
 	}
 
 	public SitioWeb getSitioWeb() {
@@ -68,7 +75,7 @@ public class Buscador {
 	    return resultado;
 	}
 	
-	long antiguedad(LocalDateTime fechaAnterior, LocalDateTime fechaActual){ //indica cuántos días han pasado entre las dos fechas dadas.
+	public long antiguedad(LocalDateTime fechaAnterior, LocalDateTime fechaActual){ //indica cuántos días han pasado entre las dos fechas dadas.
 		//PRECONDICION: “fechaAnterior” es una fecha anterior a “fechaActual”
 		return 	ChronoUnit.DAYS.between(fechaAnterior, fechaActual);
 	}
