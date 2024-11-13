@@ -54,7 +54,7 @@ class InmuebleTest {
         eventos = Arrays.asList(Mockito.mock(Evento.class), Mockito.mock(Evento.class));
         politicaDeCancelacion = Mockito.mock(PoliticaDeCancelacion.class);
 
-        // Crear la instancia de Inmueble
+        // Crear la instancia de Inmueble.
         inmueble = new Inmueble(propietario, inquilinoActivo, 0, "Apartamento", 50,
                                 "Argentina", "Buenos Aires", "Azopardo 250", 4, fotos, checkIn, checkOut,
                                 formaDePago, comentarios, ranking, formaPagoValidas, 100.0f, false, eventos,
