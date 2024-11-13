@@ -52,12 +52,27 @@ class InmuebleTest {
         formaDePago = FormaDePago.EFECTIVO;
         ranking = Mockito.mock(Ranking.class);
         formaPagoValidas = Arrays.asList(FormaDePago.EFECTIVO, FormaDePago.TARJETADEBITO);
-        eventos = Arrays.asList(Mockito.mock(Evento.class), Mockito.mock(Evento.class));
+        //eventos = Arrays.asList(Mockito.mock(Evento.class), Mockito.mock(Evento.class));
         politicaDeCancelacion = Mockito.mock(PoliticaDeCancelacion.class);
 
         // Inicializa la lista de comentarios antes de crear el objeto Comentario
         comentarios = new ArrayList<>(Arrays.asList("Comentario 1", "Comentario 2", "Comentario 3", "Comentario 4", "Comentario 5"));
         comentario = new Comentario(comentarios);
+        
+        // Crear eventos reales
+        Evento evento1 = new Evento("Conferencia", 
+                                    LocalDateTime.of(2024, 1, 5, 10, 0),
+                                    LocalDateTime.of(2024, 1, 7, 10, 0), // Duración: 2 días
+                                    50.0f); // Precio por día
+
+        Evento evento2 = new Evento("Reunión", 
+                                    LocalDateTime.of(2024, 1, 8, 10, 0),
+                                    LocalDateTime.of(2024, 1, 9, 10, 0), // Duración: 1 día
+                                    30.0f); // Precio por día
+
+        // Crear la lista de eventos y asignarla al inmueble
+        eventos = Arrays.asList(evento1, evento2);
+        
         
         // Crear la instancia de Inmueble.
         inmueble = new Inmueble(propietario, inquilinoActivo, 0, "Apartamento", 50,
@@ -151,13 +166,12 @@ class InmuebleTest {
         Mockito.verify(mockObserver, Mockito.times(1)).actuaSiBajaPrecio(inmueble);
     }
     
+    @Test
     public void testCalculoPrecioTotal() {
-        Mockito.when(eventos.get(0).duracion()).thenReturn(2L); // Evento rertorna un valor long 
-        Mockito.when(eventos.get(1).duracion()).thenReturn(1L); // Evento que el otro evento dura 1 día
-        Mockito.when(eventos.get(0).calcularPrecioTotal()).thenReturn(50.0f); // Costo del evento 1
-        Mockito.when(eventos.get(1).calcularPrecioTotal()).thenReturn(30.0f); // Costo del evento 2
+
         float precioTotal = inmueble.getPrecioTotal();
-        assertEquals(1380.0f, precioTotal, 0.001f);
+        
+        assertEquals(1430.0f, precioTotal, 0.001f);
     }
     
     public void testSetInquilinoActivo() {
