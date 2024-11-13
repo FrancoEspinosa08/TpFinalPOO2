@@ -112,7 +112,7 @@ class InmuebleTest {
         // Cambia el precio y salta el mensaje actuaSiBajaPrecio
         inmueble.setPrecioPorDia(90.0f);
 
-        // Verificar que el método actuaSiBajaPrecio se llame
+        // Verificar que el método actuaSiBajaPrecio se llame.
         Mockito.verify(mockObserver, Mockito.times(1)).actuaSiBajaPrecio(inmueble);
     }
     
