@@ -90,7 +90,7 @@ class InmuebleTest {
     
     @Test
     public void testSetPrecioPorDia() {
-        // Verificar el comportamiento del setter para precioPorDia
+        // Verificar el comportamiento del setter para precioPorDia.
         inmueble.setPrecioPorDia(90.0f);
         assertEquals(90.0f, inmueble.getPrecioPorDia());
     }
