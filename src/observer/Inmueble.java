@@ -152,6 +152,10 @@ public class Inmueble extends Subject {
 		return servicios;
 	}
 	
+	public void setServicios(List<Servicio> servicios) {
+		this.servicios = servicios;
+	}
+
 	public int getCapacidad() {
 		return capacidad;
 	}
