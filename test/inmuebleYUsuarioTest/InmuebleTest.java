@@ -70,7 +70,7 @@ class InmuebleTest {
     
     @Test
     public void testPrecioPorDia() {
-        // Verificar que el precio por día se haya configurado correctamente
+        // Verificar que el precio por día se haya configurado correctamente.
         assertEquals(100.0f, inmueble.getPrecioPorDia(), 0.001);
     }
     
