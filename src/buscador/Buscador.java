@@ -5,7 +5,6 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import administrador.Categoria;
-import inmuebleYUsuario.IPuntuable;
 import nucleo.SitioWeb;
 import observer.Inmueble;
 

@@ -100,7 +100,7 @@ public class Usuario implements IPropietario, IInquilino, IObserver {
 		List<String> listaComentarios = comentario.getCometarios();
         
         Random random = new Random();
-        int indiceAleatorio = random.nextInt(listaComentarios.size()); // Índice aleatorio en el rango de la lista
+        int indiceAleatorio = random.nextInt(listaComentarios.size()); //  Índice aleatorio en el rango de la lista
         return listaComentarios.get(indiceAleatorio);                  // Devuelve el comentario aleatorio
 	}
 
