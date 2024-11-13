@@ -123,7 +123,7 @@ public class SitioWeb {
 		
 		return this.getSistema().getAltas().stream()
 						        .filter(inmueble -> inmueble.getInquilinoActivo().equals(usuario)) // Filtramos las reservas del inquilino puntual
-						         .toList();
+						        .toList();
 	}
 
 	

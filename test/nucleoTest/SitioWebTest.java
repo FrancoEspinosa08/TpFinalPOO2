@@ -7,12 +7,14 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import administrador.Categoria;
 import administrador.Configuracion;
 import administrador.Servicio;
 import buscador.Buscador;
@@ -147,7 +149,7 @@ class SitioWebTest {
 		//Buscador
 		when(buscador.getResultadoBusqueda()).thenReturn(listaInmueblesBuscador);
 		
-		//Estado de reservas
+		//Estado de reservas 
 		when(casa.getEsReservado()).thenReturn(false); // Casa es libre
 		when(depto.getEsReservado()).thenReturn(true); // Depto tiene reserva
 		
@@ -162,18 +164,57 @@ class SitioWebTest {
 		doNothing().when(Agustin).actuaSiSeReserva(); //El observer no hace nada al ser notificado
 	}
 	
-	
 	/*@Test
-	void testReservarInmuebleRealCasa() {
+	void testCancelarReserva() {
 		
-		//Seteamos el buscador para que tenga el inmuebleReal
-		when(buscador.getResultadoBusqueda()).thenReturn(inmueblesBuscador);
+		Inmueble inmueble = new Inmueble(Ivan, null, 0, "casa",200,
+										"Argentina","BsAs","6474", 10, fotos, 
+										checkIn,checkOut, null , null,
+										rankingInmueble, formaPagoValidas, 1000F,
+										false, null, politicaCancel);
 		
-		inmuebleReal.setEsReservado(true); // Esta reservado
+		inmueble.attach(Franco);
+		inmueble.attach(Agustin);
 		
-		sitioWeb.reservar(Ivan, inmuebleReal); //reservar(Usuario usuario, Inmueble inmueble)
+		doNothing().when(Franco).actuaSiCancelarReserva(inmueble);
+		doNothing().when(Agustin).actuaSiCancelarReserva(inmueble);
+		
+		sitioWeb.cancelarReserva(inmueble , LocalDateTime.now());
+		
+		
+		assertEquals("Se ha cancelado la reserva!" , Ivan.getEmail().getInbox());
+		assertEquals(inmueble ,Ivan.getEmail().getAttachment());
+		
 		
 	}*/
+	
+	
+	@Test
+	void testRegistrarUsuario() {
+		
+		List<Categoria> categorias = new ArrayList<>(); //Lista vacia de categorias que no voy a usar. "dummy"
+		
+		when(sistema.getFechaActual()).thenReturn(LocalDateTime.now());
+		when(config.getCategoriasInquilinos()).thenReturn(categorias);
+		when(config.getCategoriasPropietario()).thenReturn(categorias);
+		
+		
+		sitioWeb.registrar(Ivan);
+		
+		verify(sistema).addUsuario(Ivan);
+	}
+	
+	
+	@Test
+	void testEncolarUsuarioSiElInmuebleEstaReservado() {
+		
+		//Seteamos el buscador para que tenga el inmuebleReal
+		when(casa.getEsReservado()).thenReturn(true);
+		
+		sitioWeb.reservar(Ivan, casa); //reservar(Usuario usuario, Inmueble inmueble)
+		
+		verify(casa).encolarUsuario(Ivan);
+	}
 	
 	@Test
 	void testNoDebeReservarInmuebleRealCasaAPartirDelBuscador() {
