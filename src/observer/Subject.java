@@ -1,9 +1,11 @@
 package observer;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Subject {
-	List<IObserver> observers;
+	
+	List<IObserver> observers = new ArrayList<>();
 
     public List<IObserver> getObservers() {
         return observers;
