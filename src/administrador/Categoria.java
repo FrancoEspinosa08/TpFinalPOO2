@@ -1,4 +1,5 @@
 package administrador;
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Categoria {
@@ -6,7 +7,7 @@ public abstract class Categoria {
     private String nombre;          // Nombre de la categoría
 
     public Categoria(List<Integer> puntaje, String nombre) {
-        this.puntaje = puntaje;
+    	this.puntaje = new ArrayList<>(puntaje);
         this.nombre = nombre;
     }
 
@@ -34,7 +35,7 @@ public abstract class Categoria {
         return (double) suma / puntaje.size();
         }
     }
-    public int cantidadQuePuntuaronCon(int puntaje){
-    	return this.getPuntaje().stream().filter(p -> p == puntaje).mapToInt(Integer::intValue).sum();
+    public int cantidadQuePuntuaronCon(int puntaje) {
+        return (int) this.getPuntaje().stream().filter(p -> p == puntaje).count();
     }
 }
