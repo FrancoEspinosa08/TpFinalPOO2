@@ -21,6 +21,7 @@ public class Buscador {
 		return resultadoBusqueda;
 	}
 
+	//constructor nuevo
 	public Buscador(List<Inmueble> resultadoBusqueda, Filtro filtro, SitioWeb sitioWeb) {
 		super();
 		this.resultadoBusqueda = resultadoBusqueda;
