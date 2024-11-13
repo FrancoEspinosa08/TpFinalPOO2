@@ -105,10 +105,9 @@ public class Usuario implements IPropietario, IInquilino, IObserver {
 	}
 
 	@Override
-	public FormaDePago seleccionarFormaDePago() {
-		FormaDePago[] formas = FormaDePago.values();                 // Obtiene todas las opciones del enum
-        int indiceAleatorio = (int) (Math.random() * formas.length); // Genera un índice aleatorio
-        return formas[indiceAleatorio];                              // Devuelve una forma de pago aleatoria
+	public FormaDePago seleccionarFormaDePago(List<FormaDePago> formas) {
+	    int indiceAleatorio = (int) (Math.random() * formas.size()); // Genera un índice aleatorio
+	    return formas.get(indiceAleatorio);                          // Devuelve una forma de pago aleatoria
 	}
 
 	@Override
@@ -131,4 +130,5 @@ public class Usuario implements IPropietario, IInquilino, IObserver {
 	public void actuaSiSeReserva() {
 		// Sin implementación
 	}
+
 }

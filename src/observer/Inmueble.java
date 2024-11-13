@@ -2,26 +2,26 @@ package observer;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 
 import administrador.Servicio;
 import inmuebleYUsuario.Evento;
 import inmuebleYUsuario.FormaDePago;
-import inmuebleYUsuario.IPuntuable;
 import inmuebleYUsuario.Ranking;
 import politicasDeCancelacion.PoliticaDeCancelacion;
 
-public class Inmueble extends Subject implements IPuntuable {
+public class Inmueble extends Subject {
 	private Usuario propietario;
 	private Usuario InquilinoActivo;
-	private List<Usuario> usuariosEnEspera;
+	private List<Usuario> usuariosEnEspera = new ArrayList<>();
 	private int vecesAlquilado;
 	private String tipoDeInmueble;
 	private int superficie;
 	private String pais;
 	private String ciudad;
 	private String direccion;
-	private List<Servicio> servicios;
+	private List<Servicio> servicios = new ArrayList<>();
 	private int capacidad;
 	private List<String> fotos;
 	private LocalDateTime horarioCheckIn;
@@ -38,22 +38,19 @@ public class Inmueble extends Subject implements IPuntuable {
 	
 	
 	
-	public Inmueble(Usuario propietario, Usuario inquilinoActivo, List<Usuario> usuariosEnEspera, int vecesAlquilado,
-			String tipoDeInmueble, int superficie, String pais, String ciudad, String direccion,
-			List<Servicio> servicios, int capacidad, List<String> fotos, LocalDateTime horarioCheckIn,
+	public Inmueble(Usuario propietario, Usuario inquilinoActivo, int vecesAlquilado, String tipoDeInmueble, int superficie,
+			String pais, String ciudad, String direccion, int capacidad, List<String> fotos, LocalDateTime horarioCheckIn,
 			LocalDateTime horarioCheckOut, FormaDePago formaDePago, List<String> comentarios,
 			Ranking ranking, List<FormaDePago> formaPagoValidas, float precioPorDia, boolean esReservado,
 			List<Evento> eventos, PoliticaDeCancelacion politicaDeCancelacion) {
 		this.propietario = propietario;
 		InquilinoActivo = inquilinoActivo;
-		this.usuariosEnEspera = usuariosEnEspera;
 		this.vecesAlquilado = vecesAlquilado;
 		this.tipoDeInmueble = tipoDeInmueble;
 		this.superficie = superficie;
 		this.pais = pais;
 		this.ciudad = ciudad;
 		this.direccion = direccion;
-		this.servicios = servicios;
 		this.capacidad = capacidad;
 		this.fotos = fotos;
 		this.horarioCheckIn = horarioCheckIn;
@@ -88,7 +85,7 @@ public class Inmueble extends Subject implements IPuntuable {
 		this.usuariosEnEspera = usuariosEnEspera;
 	}
 	
-	public FormaDePago getFormaDePago() {
+	public FormaDePago getFormasDePago() {
 		return formaDePago;
 	}
 	
