@@ -104,7 +104,7 @@ public class SitioWeb {
 			
 	            //En caso de aprobarse la reserva se añade al manager
 			inmueble.setInquilinoActivo(usuario); //Seteamos el usuario que alquila
-			inmueble.setFormaDePago(usuario.seleccionarFormaDePago()); // Seteamos la forma de pago seleccionada por el usuario
+			inmueble.setFormaDePago(usuario.seleccionarFormaDePago(inmueble.getPropietario().getFormasDePago())); // Seteamos la forma de pago seleccionada por el usuario
 			inmueble.setEsReservado(true); 
 			usuario.getEmail().setInbox("Su reserva fue aprobada!"); // Se envia mail de aviso al inquilino
 
