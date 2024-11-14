@@ -1,6 +1,7 @@
 package inmuebleYUsuarioTest;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -14,9 +15,12 @@ import org.mockito.Mockito;
 
 import administrador.Servicio;
 import inmuebleYUsuario.Comentario;
+import inmuebleYUsuario.Email;
 import inmuebleYUsuario.Evento;
 import inmuebleYUsuario.FormaDePago;
 import inmuebleYUsuario.Ranking;
+import inmuebleYUsuario.RankingUsuario;
+import observer.AppMobile;
 import observer.IObserver;
 import observer.Inmueble;
 import observer.Usuario;
@@ -39,11 +43,16 @@ class InmuebleTest {
     private PoliticaDeCancelacion politicaDeCancelacion;
     private Comentario comentario;
 	
-	
+    // mocks para inquilinoActivo
+	private Email email;
+	private List<Inmueble> inmuebles;
+	private RankingUsuario rankingParaInquilinoActivo;
+    private AppMobile appMobile;
+    
     @BeforeEach
     public void setUp() {
     	propietario = Mockito.mock(Usuario.class);
-        inquilinoActivo = Mockito.mock(Usuario.class);
+        //inquilinoActivo = Mockito.mock(Usuario.class);
         //usuariosEnEspera = Arrays.asList(Mockito.mock(Usuario.class), Mockito.mock(Usuario.class));
         //servicios = Arrays.asList(Servicio.AIREACONDICIONADO, Servicio.WIFI);
         fotos = Arrays.asList("foto1.jpg", "foto2.jpg", "foto3.png", "foto4.png", "foto5.jpg");
@@ -73,6 +82,15 @@ class InmuebleTest {
         // Crear la lista de eventos y asignarla al inmueble
         eventos = Arrays.asList(evento1, evento2);
         
+        // Usuario
+        email = mock(Email.class);
+        inmuebles = Arrays.asList(mock(Inmueble.class)); // Crear un mock de Inmueble
+        rankingParaInquilinoActivo = mock(RankingUsuario.class);
+        appMobile = mock(AppMobile.class);
+        
+        inquilinoActivo = new Usuario("Leo Messi", "123456789", email, LocalDateTime.now(), rankingParaInquilinoActivo, inmuebles, comentario,
+                3, appMobile);
+        
         
         // Crear la instancia de Inmueble.
         inmueble = new Inmueble(propietario, inquilinoActivo, 0, "Apartamento", 50,
@@ -91,6 +109,45 @@ class InmuebleTest {
     @Test
     public void testGetCapacidad() {
         assertEquals(4, inmueble.getCapacidad());
+    }
+    
+    @Test
+    public void testGetPropietario() {
+        assertEquals(propietario, inmueble.getPropietario());
+    }
+    
+    @Test
+    public void testGetRanking() {
+        assertEquals(ranking, inmueble.getRanking());
+    }
+    
+    @Test
+    public void testGetInquilinoActivo() {
+        assertEquals(inquilinoActivo, inmueble.getInquilinoActivo());
+    }
+    
+    @Test
+    public void testSetInquilinoActivo() {
+
+        inmueble.setInquilinoActivo(inquilinoActivo);
+        assertEquals(inquilinoActivo, inmueble.getInquilinoActivo());
+    }
+    
+    @Test
+    public void testSetServicios() {
+        List<Servicio> nuevosServicios = Arrays.asList(Servicio.GAS, Servicio.WIFI);
+        inmueble.setServicios(nuevosServicios);
+        assertEquals(nuevosServicios, inmueble.getServicios());
+    }
+    
+    @Test
+    public void testGetSuperficie() {
+        assertEquals(50, inmueble.getSuperficie());
+    }
+    
+    @Test
+    public void testGetTipoDeInmueble() {
+        assertEquals("Apartamento", inmueble.getTipoDeInmueble());
     }
 
     @Test
@@ -116,6 +173,11 @@ class InmuebleTest {
     @Test
     public void testGetHorarioCheckOut() {
         assertEquals(checkOut, inmueble.getFechaCheckOut());
+    } 
+    
+    @Test
+    public void testGetPoliticaDeCancelacion() {
+        assertEquals(politicaDeCancelacion, inmueble.getPoliticaDeCancelacion());
     } 
     
     @Test
@@ -166,6 +228,7 @@ class InmuebleTest {
         Mockito.verify(mockObserver, Mockito.times(1)).actuaSiBajaPrecio(inmueble);
     }
     
+    
     @Test
     public void testCalculoPrecioTotal() {
 
@@ -174,11 +237,6 @@ class InmuebleTest {
         assertEquals(1430.0f, precioTotal, 0.001f);
     }
     
-    public void testSetInquilinoActivo() {
-        Usuario nuevoInquilino = Mockito.mock(Usuario.class);
-        inmueble.setInquilinoActivo(nuevoInquilino);
-        assertEquals(nuevoInquilino, inmueble.getInquilinoActivo());
-    }
     
     @Test
     public void testGetComentarios() {
