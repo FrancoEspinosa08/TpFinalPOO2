@@ -13,6 +13,14 @@ public class FiltroCompuesto extends Filtro {
     public FiltroCompuesto(List<Filtro> filtros) {
         this.filtros = filtros;
     }
+    
+    public void addFiltro(Filtro filtro) {
+    	this.filtros.add(filtro);
+    }
+    
+    public void removeFiltro(Filtro filtro) {
+    	this.filtros.remove(filtro);
+    }
 
     // Método que filtra los inmuebles por ciudad, fecha de check-in, check-out y aplicando filtros compuestos
     @Override
