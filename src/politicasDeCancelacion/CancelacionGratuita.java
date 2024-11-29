@@ -4,18 +4,19 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
 import observer.Inmueble;
+import observer.Reserva;
 
 public class CancelacionGratuita extends PoliticaDeCancelacion{
 
 	@Override
-	public float aplicarPenalidad(Inmueble reservaACancelar, LocalDateTime diaDeLaCancelacion) {
+	public float aplicarPenalidad(Reserva reservaACancelar, LocalDateTime diaDeLaCancelacion) {
 		
-		long diasDeAntelacion = ChronoUnit.DAYS.between(diaDeLaCancelacion, reservaACancelar.getFechaCheckIn());
+		long diasDeAntelacion = ChronoUnit.DAYS.between(diaDeLaCancelacion, reservaACancelar.getCheckIn());
 		
 		if (diasDeAntelacion >= 10) {
 			return 0; // Cancelación gratuita
 		} else {
-			return reservaACancelar.getPrecioPorDia() * 2; // Penalidad de dos días
+			return reservaACancelar.getInmueble().getPrecioPorDia() * 2; // Penalidad de dos días
 		}	
 	}
 

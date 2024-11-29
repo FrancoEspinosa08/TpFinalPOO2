@@ -1,10 +1,11 @@
 package inmuebleYUsuario;
 
-import observer.Inmueble;
+
+import observer.Reserva;
 
 public class Email {
 	private String inbox;
-    private Inmueble attachment;
+    private Reserva attachment;
    
     
     public Email() {
@@ -14,20 +15,20 @@ public class Email {
         return inbox;
     }
 
-    public void setInbox(String mensaje, Inmueble inmueble){
+    public void setInbox(String mensaje, Reserva reserva){
         this.inbox = mensaje;
-        this.attachment = inmueble;
+        this.attachment = reserva;
     }
 
     public void setInbox(String mensaje) {
         this.inbox = mensaje;
     }
 
-    public Inmueble getAttachment() {
+    public Reserva getAttachment() {
         return attachment;
     }
 
-    public void setAttachment(Inmueble attachment) {
+    public void setAttachment(Reserva attachment) {
         this.attachment = attachment;
     }
 }
