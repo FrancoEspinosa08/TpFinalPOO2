@@ -8,6 +8,7 @@ import administrador.Servicio;
 import buscador.Buscador;
 import inmuebleYUsuario.RankingUsuario;
 import observer.Inmueble;
+import observer.Reserva;
 import observer.Usuario;
 
 public class SitioWeb {
@@ -82,34 +83,36 @@ public class SitioWeb {
 
 		Inmueble inmueble = this.getBuscador().getResultadoBusqueda().get(index); // esto es el inmueble que se va a reservar
 
+		
+		//this.logicaDeReserva(reservaPendiente , usuario);		VER!
 		this.logicaDeReserva(inmueble,usuario);
-				
+		
 	}
 
 	//Reservar si soy el siguiente en la lista de espera 
-	public void reservar(Usuario usuario, Inmueble inmueble){
+	public void reservar(Usuario usuario, Reserva reservaPendiente){
 		
-		this.logicaDeReserva(inmueble,usuario);
+		this.logicaDeReserva(reservaPendiente , usuario);
 		
 	}
 
 	//La logica de reserva se encarga de manejar los controles
 	//necesarios antes de poder reservar un inmueble.
-	public void logicaDeReserva(Inmueble inmueble,Usuario usuario){
+	public void logicaDeReserva(Reserva reserva , Usuario usuario){
 
-		if(inmueble.getEsReservado()){
-		     inmueble.encolarUsuario(usuario);
-		}
-		else if (inmueble.getPropietario().decidirSiReserva()){//True si el propietario decide hacer la reserva
+		if(reserva.getInmueble().hayReservaActivaEntre(reserva.getCheckIn(), reserva.getCheckOut())){ //Si no hay vacante
 			
-	            //En caso de aprobarse la reserva se añade al manager
-			inmueble.setInquilinoActivo(usuario); //Seteamos el usuario que alquila
-			inmueble.setFormaDePago(usuario.seleccionarFormaDePago(inmueble.getFormasDePago())); // Seteamos la forma de pago seleccionada por el usuario
-			inmueble.setEsReservado(true); 
+		     reserva.getInmueble().addReservaPendiente(reserva); //Si no hay lugar, pasa a ser reserva pendiente
+		}
+		else if (reserva.getInmueble().getPropietario().decidirSiReserva()){//True si el propietario decide hacer la reserva
+			
+	        
+			reserva.setFormaDePago(usuario.seleccionarFormaDePago(reserva.getInmueble().getFormasDePago())); // Seteamos la forma de pago seleccionada por el usuario
+
 			usuario.getEmail().setInbox("Su reserva fue aprobada!"); // Se envia mail de aviso al inquilino
 
 			//Notificamos a los interesados sobre la realizacion de la reserva
-			inmueble.notificarSeHaceReserva();
+			reserva.getInmueble().notificarSeHaceReserva();
 		
 
 		}else{
@@ -119,35 +122,32 @@ public class SitioWeb {
 
 	}
 	
-	public List<Inmueble> obtenerTodasLasReservasDe(Usuario usuario){
+	public List<Reserva> obtenerTodasLasReservasDe(Usuario usuario){
 		
 		return this.getSistema().getAltas().stream()
-						        .filter(inmueble -> inmueble.getInquilinoActivo().equals(usuario)) // Filtramos las reservas del inquilino puntual
-						        .toList();
+						        .map(inmueble -> inmueble.getReservasActivas()) // lista de lista de reservas
+						        .flatMap(r -> r.stream())						// stream de lista unica
+						        .filter(r -> r.getInquilino().equals(usuario))	// filtramos solo las reservas del usuario que queremos
+						        .toList();										// Transformamos en lista
 	}
 
 	
-	public List<Inmueble> obtenerReservasFuturasDe(Usuario usuario){
+	public List<Reserva> obtenerReservasFuturasDe(Usuario usuario){
 		
 		LocalDateTime fechaActual     = this.getSistema().getFechaActual();
 
 		return this.obtenerTodasLasReservasDe(usuario).stream()
-												     .filter(reserva -> esFechaAnterior(fechaActual , reserva.getFechaCheckIn() ) )//aca estamos comparando si la fecha actual es anterior a la del checkIn
-												     .toList();
+												      .filter(reserva -> fechaActual.isBefore(reserva.getCheckIn())) // Comparamos si la fecha actual es anterior a la del checkIn
+												      .toList();
 	}
 
 
-
-	public boolean esFechaAnterior(LocalDateTime primerFecha, LocalDateTime segundaFecha){
-
-		return primerFecha.isBefore(segundaFecha);
-	}
 
 	
-	public List<Inmueble> obtenerReservasEnCiudad(Usuario usuario, String ciudad){
+	public List<Reserva> obtenerReservasEnCiudad(Usuario usuario, String ciudad){
 		
 		return this.obtenerTodasLasReservasDe(usuario).stream()
-								         			  .filter(reserva -> reserva.getCiudad().equals(ciudad)) // Lista de reservas en una ciudad en particular
+								         			  .filter(reserva -> reserva.getInmueble().getCiudad().equals(ciudad)) // Lista de reservas en una ciudad en particular
 								         			  .toList();
 	}
 
@@ -155,30 +155,38 @@ public class SitioWeb {
 	public List<String> obtenerCiudadesConReservaDe(Usuario usuario){
 		
 		return this.obtenerTodasLasReservasDe(usuario).stream()
-								         		  	  .map(reserva -> reserva.getCiudad()) // Todas las ciudades donde tengo reservas
+								         		  	  .map(reserva -> reserva.getInmueble().getCiudad()) // Todas las ciudades donde tengo reservas
 								         		  	  .toList();
 	}
 
 	
-	public void cancelarReserva(Inmueble reservaACancelar, LocalDateTime diaDeLaCancelacion){
+	public void cancelarReserva(Reserva reservaACancelar, LocalDateTime diaDeLaCancelacion){
 		
 	       //PRECONDICION: El parametro diaDeLaCancelacion es la fecha actual. Sistema.getFechaActual();	
 
 	       //PRECONDICION: Este metodo es llamado por un inquilino para cancelar una reserva propia, no puede cancelar reservas de otros inquinos.
 		
-	       reservaACancelar.getPropietario().getEmail().setInbox("Se ha cancelado la reserva!", reservaACancelar); // Enviamos mail para notificar al propietario de la cancelacion
+	       reservaACancelar.getInmueble().getPropietario().getEmail().setInbox("Se ha cancelado la reserva!", reservaACancelar); // Enviamos mail para notificar al propietario de la cancelacion
 	    
 
 	     //Notifico de la cancelacion del inmueble a los interesados
-	      reservaACancelar.notificarCancelacionReserva();
+	      reservaACancelar.getInmueble().notificarCancelacionReserva();
 
 	     //Cancelar reserva aplicando politica de cancelacion correspondiente.
-	     reservaACancelar.getPoliticaDeCancelacion().aplicarPenalidad(reservaACancelar, diaDeLaCancelacion);	
+	     reservaACancelar.getInmueble().getPoliticaDeCancelacion().aplicarPenalidad(reservaACancelar, diaDeLaCancelacion);	
 
-	     reservaACancelar.setInquilinoActivo(null);
 	     
-	     //Pasa a reservar el siguiente usuario en la lista de espera
-	     this.reservar(reservaACancelar.getUsuariosEnEspera().getFirst() , reservaACancelar );
+	     if(reservaACancelar.getInmueble().hayReservaPendienteEntre(reservaACancelar.getCheckIn(), reservaACancelar.getCheckOut())) {
+	    	 
+	    	 Reserva reservaPendiente = reservaACancelar.getInmueble().reservaPendienteEntre(reservaACancelar.getCheckIn(), reservaACancelar.getCheckOut()).getFirst();
+	    	 
+	    	//Pasa a reservar el siguiente usuario en la lista de espera
+	    	 this.reservar(reservaPendiente.getInquilino() , reservaPendiente);
+	     }
+	     
+	     
+	     
+	   
 	}
 
 	
@@ -199,7 +207,7 @@ public class SitioWeb {
 	public List<Inmueble> obtenerTodosLosInmueblesLibres(){
 
 			return this.getSistema().getAltas().stream()
-							      		       .filter(inmueble -> !inmueble.getEsReservado()) //Filtramos para obtener los NO reservados
+							      		       .filter(inmueble -> !inmueble.esReservado()) //Filtramos para obtener los NO reservados
 							      		       .toList();
 	}
 
@@ -208,7 +216,7 @@ public class SitioWeb {
 	public double tasaDeOcupacion(){ // inmuebles alquilados sobre total de inmuebles
 		
 		   double totalDeInmuebles 			  = this.getSistema().getAltas().size();
-		   double cantidadInmueblesAlquilados = this.getSistema().getAltas().stream().filter(inmueble -> inmueble.getEsReservado()).count();
+		   double cantidadInmueblesAlquilados = this.getSistema().getAltas().stream().filter(inmueble -> inmueble.esReservado()).count();
 
 		return  cantidadInmueblesAlquilados / totalDeInmuebles;
 

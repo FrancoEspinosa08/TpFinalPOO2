@@ -7,6 +7,7 @@ import java.util.List;
 
 import administrador.Categoria;
 import observer.Inmueble;
+import observer.Reserva;
 import observer.Usuario;
 
 //Sistema principal
@@ -30,22 +31,24 @@ public class Sistema {
 		
 		//Filtramos las reservas que esten vencidas y llamamos a checkOut() con cada una
 		//OBS: Se asume que este metodo se llama regularmente.	
-		this.getTodasLasReservas().stream() // Transformamos la lista de reservas en un stream
-		                          .filter(reserva -> reserva.getFechaCheckOut().equals(this.fechaActual)) // Filtramos para obtener las reservas vencidas
-						          .forEach(reserva -> this.checkOut(reserva.getInquilinoActivo(), reserva)); // Hacemos checkout por cada una
+		this.getTodasLasReservasActivas().stream() 
+		                          .filter(reserva -> reserva.getCheckOut().equals(this.fechaActual)) // Filtramos para obtener las reservas vencidas
+						          .forEach(reserva -> this.checkOut(reserva.getInquilino(), reserva)); // Hacemos checkout por cada una
 
 	}
 	
 	//Se realiza el checkOut, se puntua y se comenta.
-	public void checkOut(Usuario usuario, Inmueble inmueble){ 
+	public void checkOut(Usuario usuario, Reserva reserva){ 
 
-		this.puntuarInmueble(inmueble, usuario);
-		this.puntuarPropietario(inmueble.getPropietario(), usuario);
-		this.puntuarInquilino(inmueble.getPropietario(), usuario);
-		this.añadirComentario(usuario.generarComentario(), inmueble);
-		this.incrementarVecesAlquiladoDe(inmueble, inmueble.getPropietario());
+		this.puntuarInmueble(reserva.getInmueble(), usuario);
+		this.puntuarPropietario(reserva.getInmueble().getPropietario(), usuario);
+		this.puntuarInquilino(reserva.getInmueble().getPropietario(), usuario);
+		this.añadirComentario(usuario.generarComentario(), reserva.getInmueble());
+		this.incrementarVecesAlquiladoDe(reserva.getInmueble(), reserva.getInmueble().getPropietario());
 	    usuario.incrementarVecesQueAlquilo(); // Feo pero no queda otra
-		this.removeAlta(inmueble); //Eliminar reserva
+
+	    //Eliminar reserva
+	    reserva.getInmueble().removeReservaActiva(reserva);
 	} 
 
 	public void puntuarInmueble(Inmueble inmueble, Usuario usuario) //El inquilino puntua un inmueble en todas las categorías
@@ -82,11 +85,13 @@ public class Sistema {
         .orElse(null);
 	}
 
-	public List<Inmueble> getTodasLasReservas(){ // Devuelve la lista de todos los inmuebles que estan reservados
+	public List<Reserva> getTodasLasReservasActivas(){ // Devuelve la lista de todos los inmuebles que estan reservados
 		
 		return this.getAltas().stream()
-        .filter(inmueble -> inmueble.getEsReservado())
-        .toList();
+				   .map(inmueble -> inmueble.getReservasActivas()) //Obtengo cada lista de reservas
+				   .flatMap(lista -> lista.stream())			   //Fusiono todo en un solo stream
+				   .toList();									   //List<Reserva>
+        
 	}
 
 	

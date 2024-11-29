@@ -13,8 +13,6 @@ import politicasDeCancelacion.PoliticaDeCancelacion;
 
 public class Inmueble extends Subject {
 	private Usuario propietario;
-	private Usuario InquilinoActivo;
-	private List<Usuario> usuariosEnEspera = new ArrayList<>();
 	private int vecesAlquilado;
 	private String tipoDeInmueble;
 	private int superficie;
@@ -26,24 +24,26 @@ public class Inmueble extends Subject {
 	private List<String> fotos;
 	private LocalDateTime horarioCheckIn;
 	private LocalDateTime horarioCheckOut;
-	private FormaDePago formaDePago;
 	private List<String> comentarios;
 	private Ranking ranking;
 	private List<FormaDePago> formaPagoValidas;
 	private float precioPorDia;
-	private boolean esReservado;
 	private List<Evento> eventos;
 	private PoliticaDeCancelacion politicaDeCancelacion;
 	
+	//NUEVO
+	List<Reserva> reservasActivas    = new ArrayList<Reserva>();
+	List<Reserva> reservasPendientes = new ArrayList<Reserva>();
 	
 	
-	public Inmueble(Usuario propietario, Usuario inquilinoActivo, int vecesAlquilado, String tipoDeInmueble, int superficie,
+	public Inmueble(Usuario propietario, int vecesAlquilado, String tipoDeInmueble, int superficie,
 			String pais, String ciudad, String direccion, int capacidad, List<String> fotos, LocalDateTime horarioCheckIn,
 			LocalDateTime horarioCheckOut, FormaDePago formaDePago, List<String> comentarios,
-			Ranking ranking, List<FormaDePago> formaPagoValidas, float precioPorDia, boolean esReservado,
+			Ranking ranking, List<FormaDePago> formaPagoValidas, float precioPorDia,
 			List<Evento> eventos, PoliticaDeCancelacion politicaDeCancelacion) {
+		
 		this.propietario = propietario;
-		InquilinoActivo = inquilinoActivo;
+	
 		this.vecesAlquilado = vecesAlquilado;
 		this.tipoDeInmueble = tipoDeInmueble;
 		this.superficie = superficie;
@@ -54,49 +54,107 @@ public class Inmueble extends Subject {
 		this.fotos = fotos;
 		this.horarioCheckIn = horarioCheckIn;
 		this.horarioCheckOut = horarioCheckOut;
-		this.formaDePago = formaDePago;
 		this.comentarios = comentarios;
 		this.ranking = ranking;
 		this.formaPagoValidas = formaPagoValidas;
 		this.precioPorDia = precioPorDia;
-		this.esReservado = esReservado;
+		
 		this.eventos = eventos;
 		this.politicaDeCancelacion = politicaDeCancelacion;
 	}
 
+	
+	//NUEVO
+	public void addReservaActiva(Reserva reserva) {
+		this.reservasActivas.add(reserva);
+	}
+	//NUEVO
+	public void removeReservaActiva(Reserva reserva) {
+		this.reservasActivas.remove(reserva);
+	}
+	//NUEVO
+	public void addReservaPendiente(Reserva reserva) {
+		this.reservasPendientes.add(reserva);
+	}
+	//NUEVO
+	public void removeReservaPendiente(Reserva reserva) {
+		this.reservasPendientes.remove(reserva);
+	}
+	//NUEVO
+	public List<Reserva> getReservasActivas(){
+		return this.reservasActivas;
+	}
+	//NUEVO
+	public List<Reserva> getReservasPendientes(){
+		return this.reservasPendientes;
+	}
+	
+	
+	//NUEVO
+	public boolean hayReservaActivaEntre(LocalDateTime In, LocalDateTime Out){
+		/*
+		 * Un periodo se considera ocupado si 
+		 * 
+		 *  El In está antes (o es igual) del checkOut de la reserva. 
+		 *  					Y
+		 *  El Out está después (o es igual) del checkIn de la reserva.	
+    	*/
+		
+		return  this.reservasActivas.stream()
+                					.anyMatch(r -> (In.isBefore(r.getCheckOut()) || In.isEqual(r.getCheckOut()))
+                							    && (Out.isAfter(r.getCheckIn()) || Out.isEqual(r.getCheckIn()))
+                							 );
+		
+		
+	}
+	//NUEVO --Este metodo a lo mejor no se utilizara VER.
+	public boolean hayReservaPendienteEntre(LocalDateTime In, LocalDateTime Out){
+		/*
+		 * Un periodo se considera ocupado si 
+		 * 
+		 *  El In está antes (o es igual) del checkOut de la reserva. 
+		 *  					Y
+		 *  El Out está después (o es igual) del checkIn de la reserva.	
+    	*/
+		
+		return  this.reservasPendientes.stream()
+                					   .anyMatch(r -> (In.isBefore(r.getCheckOut()) || In.isEqual(r.getCheckOut()))
+                							   	   && (Out.isAfter(r.getCheckIn()) || Out.isEqual(r.getCheckIn()))
+                							    );
+		
+		
+	}
+	
+	//NUEVO
+	public List<Reserva> reservaPendienteEntre(LocalDateTime checkIn, LocalDateTime checkOut) {
+		
+		return this.getReservasPendientes().stream()
+										   .filter(r -> (checkIn.isBefore(r.getCheckOut()) || checkIn.isEqual(r.getCheckOut()))
+                							   	      && (checkOut.isAfter(r.getCheckIn()) || checkOut.isEqual(r.getCheckIn())))
+										   .toList();
+	}
+	
+	//NUEVO
+	public boolean esReservado() {
+		
+		return !this.getReservasActivas().isEmpty(); //Si no esta vacio, es que hay reservas.
+	}
+
+	
+	
 	public Usuario getPropietario() {
 		return propietario;
 	}
 
-	public Usuario getInquilinoActivo() {
-		return InquilinoActivo;
-	}
+
 	
-	public void setInquilinoActivo(Usuario inquilinoActivo) {
-		InquilinoActivo = inquilinoActivo;
-	}
-	
-	public List<Usuario> getUsuariosEnEspera() {
-		return usuariosEnEspera;
-	}
-	
-	public void encolarUsuario(Usuario usuario) {
-		this.usuariosEnEspera = usuariosEnEspera;
-	}
-	
-	public FormaDePago getFormaDePago() {
-		return formaDePago;
-	}
-	
+
 	
 	public List<FormaDePago> getFormasDePago() {
 		return formaPagoValidas;
 	}
 	
-	public void setFormaDePago(FormaDePago formaDePago) {
-		this.formaDePago = formaDePago;
-	}
-	
+
 	public List<String> getComentarios() {
 		return comentarios;
 	}
@@ -112,13 +170,7 @@ public class Inmueble extends Subject {
 		this.precioPorDia = nuevoPrecio;
 	}
 	
-	public boolean getEsReservado() {
-		return esReservado;
-	}
 	
-	public void setEsReservado(boolean esReservado) {
-		this.esReservado = esReservado;
-	}
 	
 	public int getVecesAlquilado() {
 		return vecesAlquilado;
@@ -230,4 +282,9 @@ public class Inmueble extends Subject {
 			observer.actuaSiSeReserva();
 		}
 	}
+
+
+	
+
+	
 }
