@@ -5,6 +5,9 @@ import java.util.List;
 import observer.Inmueble;
 
 public abstract class Filtro {
+	private final Filtro filtroCiudad = new FiltroCiudad();
+	private final Filtro filtroCheckIn = new FiltroCheckIn();
+	private final Filtro filtroCheckOut = new FiltroCheckOut();
 
 	public List<Inmueble> filtrar(String ciudad, LocalDateTime checkIn, LocalDateTime checkOut, List<Inmueble> altas) {
         return this.filtrosObligatorios(ciudad, checkIn, checkOut, altas);
@@ -40,4 +43,16 @@ public abstract class Filtro {
                         .filter(inmueble -> inmueble.getFechaCheckOut().equals(checkOut)) // Filtra por fecha de check-out
                         .toList();
     }
+    
+    public Filtro getFiltroCiudad() {
+		return filtroCiudad;
+	}
+
+	public Filtro getFiltroCheckIn() {
+		return filtroCheckIn;
+	}
+
+	public Filtro getFiltroCheckOut() {
+		return filtroCheckOut;
+	}
 }

@@ -160,5 +160,20 @@ class BuscadorTest {
         String expected = "Casa\nDepartamento\nQuincho\n";
         assertEquals(expected, resultado);
     }
+    
+    @Test
+    void testAddFiltro() {
+        buscador.addFiltro(filtro);
+
+        assertEquals(filtro, buscador.getFiltro());
+    }
+
+    @Test
+    void testRemoveFiltro() {
+        buscador.addFiltro(filtro);
+        buscador.removeFiltro();
+
+        assertEquals(null, buscador.getFiltro());
+    }
 
 }
