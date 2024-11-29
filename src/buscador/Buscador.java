@@ -9,116 +9,118 @@ import nucleo.SitioWeb;
 import observer.Inmueble;
 
 public class Buscador {
-	//Atributos
-	private List<Inmueble> resultadoBusqueda; //Aca se almacena el resultado de cada busqueda
-	private Filtro filtro; // Filtro a aplicar en la busqueda
-	private SitioWeb sitioWeb;
-	
-	//Metodos
-	
-	
-	public List<Inmueble> getResultadoBusqueda() {
-		return resultadoBusqueda;
-	}
+    // Atributos
+    private Filtro filtro; // Filtro a aplicar en la búsqueda
+    private SitioWeb sitioWeb;
 
-	//constructor nuevo
-	public Buscador(List<Inmueble> resultadoBusqueda, Filtro filtro, SitioWeb sitioWeb) {
-		super();
-		this.resultadoBusqueda = resultadoBusqueda;
-		this.filtro = filtro;
-		this.sitioWeb = sitioWeb;
-	}
+    // Constructor
+    public Buscador(Filtro filtro, SitioWeb sitioWeb) {
+        this.filtro = filtro;
+        this.sitioWeb = sitioWeb;
+    }
 
-	public SitioWeb getSitioWeb() {
-		return sitioWeb;
-	}
-	public Filtro getFiltro() {
-		return filtro;
-	}
-	public String visualizar(int index) { 
-	    // Visualiza los datos correspondientes al inmueble de la lista resultadoBusqueda[index]
+    public SitioWeb getSitioWeb() {
+        return sitioWeb;
+    }
 
-	    Inmueble inmueble = resultadoBusqueda.get(index); // Obtiene el inmueble seleccionado
-	    return "Tipo de Inmueble : " + inmueble.getTipoDeInmueble() + "\n" +
-	           "Superficie : " + inmueble.getSuperficie() + "\n" +
-	           "Pais: " + inmueble.getPais() + "\n" +
-	           "Ciudad: " + inmueble.getCiudad() + "\n" +
-	           "Direccion: " + inmueble.getDireccion() + "\n" +
-	           "Servicios: " + inmueble.getServicios() + "\n" +  
-	           "Capacidad: " + inmueble.getCapacidad() + "\n" +  
-	           "Fotos: " + inmueble.getFotos() + "\n" +         
-	           "Fecha de ingreso: " + inmueble.getFechaCheckIn() + "\n" +
-	           "Fecha de egreso: " + inmueble.getFechaCheckOut() + "\n" +
-	           "Precio: " + inmueble.getPrecioPorDia() + "\n" +      
-	           "Comentarios: " + inmueble.getComentarios() + "\n" + // Devuelve todos los comentarios del inmueble
-	           "Puntajes por categoria : " + this.puntajePorCategoria(inmueble.getRanking().getCategorias()) + "\n" +
-	           "Promedio Total : " + inmueble.getRanking().promedioTotal(inmueble.getRanking().getCategorias()) + "\n" +
-	           "Promedio Por Categoria: " + this.promedioPorCategoria(inmueble.getRanking().getCategorias()) + "\n" +
-	           "<----------Informacion del dueño---------->" + "\n" +
-	           "Nombre: " + inmueble.getPropietario().getNombre() + "\n" +
-	           "Telefono: " + inmueble.getPropietario().getTelefono() + "\n" + 
-	           "Email: " + inmueble.getPropietario().getEmail() + "\n" +       
-	           "Puntajes por categoria : " + this.puntajePorCategoria(inmueble.getPropietario().getRanking().getCategoriasPropietario()) + "\n" +
-	           "Promedio por categoria: " + this.promedioPorCategoria(inmueble.getPropietario().getRanking().getCategoriasPropietario()) + "\n" +
-	           "Antiguedad : " + this.antiguedad(inmueble.getPropietario().getFechaDeInscripcion(), LocalDateTime.now()) + "\n" +
-	           "Cantidad de veces se alquiló el inmueble: " + inmueble.getVecesAlquilado() + "\n" +
-	           "Cantidad de veces que alquiló inmuebles: " + inmueble.getPropietario().cantidadTotalDeAlquileres() + "\n" +
-	           "Inmuebles Alquilados: " + this.tiposDeInmueblesEn(inmueble.getPropietario().getInmuebles()) + "\n";
-	}
+    public Filtro getFiltro() {
+        return filtro;
+    }
 
-	public String tiposDeInmueblesEn(List<Inmueble> inmuebles) { //contiene los tipos de inmuebles presentes en la lista inmuebles
-	    String resultado = "";	
+    public void addFiltro(Filtro filtro) { // Agrega un filtro para realizar la búsqueda
+        this.filtro = filtro;
+    }
 
-	    for(Inmueble i : inmuebles) {
-	        resultado += i.getTipoDeInmueble() + "\n";
-	    }
+    public void removeFiltro() { // Remueve el filtro que se utiliza en la búsqueda
+        this.filtro = null;
+    }
 
-	    return resultado;
-	}
-	
-	public long antiguedad(LocalDateTime fechaAnterior, LocalDateTime fechaActual){ //indica cuántos días han pasado entre las dos fechas dadas.
-		//PRECONDICION: “fechaAnterior” es una fecha anterior a “fechaActual”
-		return 	ChronoUnit.DAYS.between(fechaAnterior, fechaActual);
-	}
-	
-	public String puntajePorCategoria(List<Categoria> categorias) { //contiene, para cada categoría, la cantidad de votos que tiene para cada puntaje. 
-	    String salida = "";
-	    
-	    for (Categoria c : categorias) {
-	        salida += c.getNombre() + ":\n" +
-	                  "5 Puntos: " + c.cantidadQuePuntuaronCon(5) + "\n" +
-	                  "4 Puntos: " + c.cantidadQuePuntuaronCon(4) + "\n" +
-	                  "3 Puntos: " + c.cantidadQuePuntuaronCon(3) + "\n" +
-	                  "2 Puntos: " + c.cantidadQuePuntuaronCon(2) + "\n" +
-	                  "1 Punto: " + c.cantidadQuePuntuaronCon(1) + "\n";
-	    }
+    public List<Inmueble> buscar(String ciudad, LocalDateTime checkIn, LocalDateTime checkOut) {
+        // PRECONDICIÓN: Antes de ejecutar este método se debe haber seteado un filtro.
+        if (this.filtro == null) {
+            throw new IllegalStateException("No se ha configurado un filtro para realizar la búsqueda.");
+        }
 
-	    return salida;
-	}
-	
-	public String promedioPorCategoria(List<Categoria> categorias) { //muestra el nombre de cada categoría junto con su puntaje promedio
-	    String salida = "";
+        // Realiza la búsqueda aplicando el filtro y devuelve el resultado
+        return this.getFiltro().filtrar(ciudad, checkIn, checkOut, this.getSitioWeb().getSistema().getAltas());
+    }
 
-	    for (Categoria c : categorias) {
-	        salida += c.getNombre() + ": " + c.promedio() + "\n";
-	    }
+    public String visualizar(int index, String ciudad, LocalDateTime checkIn, LocalDateTime checkOut) {
+        // Obtiene los resultados de la búsqueda
+        List<Inmueble> inmuebles = this.buscar(ciudad, checkIn, checkOut);
 
-	    return salida;
-	}
-	
-	public void buscar(String ciudad, LocalDateTime checkIn, LocalDateTime checkOut) {
-	    // PRECONDICIÓN: Antes de ejecutar este método se debe haber seteado un filtro.
-		
-	    // Realiza la búsqueda aplicando el filtro definido y guarda el resultado en resultadoBusqueda
-	    this.resultadoBusqueda = this.getFiltro().filtrar(ciudad, checkIn, checkOut, this.getSitioWeb().getSistema().getAltas());
-	}
+        // Verificar si el índice es válido
+        if (index < 0 || index >= inmuebles.size()) {
+            return "Índice fuera de rango. No se puede visualizar el inmueble.";
+        }
 
-	public void addFiltro(Filtro filtro) { // Agrega un filtro para realizar la búsqueda
-	    this.filtro = filtro; 
-	}
+        // Obtener el inmueble seleccionado
+        Inmueble inmueble = inmuebles.get(index);
 
-	public void removeFiltro() { // Remueve el filtro que se utiliza en la búsqueda
-	    this.filtro = null;
-	}
+        // Construir la información del inmueble
+        return "Tipo de Inmueble: " + inmueble.getTipoDeInmueble() + "\n" +
+               "Superficie: " + inmueble.getSuperficie() + "\n" +
+               "País: " + inmueble.getPais() + "\n" +
+               "Ciudad: " + inmueble.getCiudad() + "\n" +
+               "Dirección: " + inmueble.getDireccion() + "\n" +
+               "Servicios: " + inmueble.getServicios() + "\n" +
+               "Capacidad: " + inmueble.getCapacidad() + "\n" +
+               "Fotos: " + inmueble.getFotos() + "\n" +
+               "Fecha de ingreso: " + inmueble.getFechaCheckIn() + "\n" +
+               "Fecha de egreso: " + inmueble.getFechaCheckOut() + "\n" +
+               "Precio: " + inmueble.getPrecioPorDia() + "\n" +
+               "Comentarios: " + inmueble.getComentarios() + "\n" +
+               "Puntajes por categoría: " + this.puntajePorCategoria(inmueble.getRanking().getCategorias()) + "\n" +
+               "Promedio Total: " + inmueble.getRanking().promedioTotal(inmueble.getRanking().getCategorias()) + "\n" +
+               "Promedio por Categoría: " + this.promedioPorCategoria(inmueble.getRanking().getCategorias()) + "\n" +
+               "<----------Información del dueño---------->\n" +
+               "Nombre: " + inmueble.getPropietario().getNombre() + "\n" +
+               "Teléfono: " + inmueble.getPropietario().getTelefono() + "\n" +
+               "Email: " + inmueble.getPropietario().getEmail() + "\n" +
+               "Puntajes por categoría: " + this.puntajePorCategoria(inmueble.getPropietario().getRanking().getCategoriasPropietario()) + "\n" +
+               "Promedio por categoría: " + this.promedioPorCategoria(inmueble.getPropietario().getRanking().getCategoriasPropietario()) + "\n" +
+               "Antigüedad: " + this.antiguedad(inmueble.getPropietario().getFechaDeInscripcion(), LocalDateTime.now()) + "\n" +
+               "Cantidad de veces que se alquiló el inmueble: " + inmueble.getVecesAlquilado() + "\n" +
+               "Cantidad de veces que alquiló inmuebles: " + inmueble.getPropietario().cantidadTotalDeAlquileres() + "\n" +
+               "Inmuebles Alquilados: " + this.tiposDeInmueblesEn(inmueble.getPropietario().getInmuebles()) + "\n";
+    }
 
+    public String tiposDeInmueblesEn(List<Inmueble> inmuebles) {
+        String resultado = "";
+
+        for (Inmueble i : inmuebles) {
+            resultado += i.getTipoDeInmueble() + "\n";
+        }
+
+        return resultado;
+    }
+
+    public long antiguedad(LocalDateTime fechaAnterior, LocalDateTime fechaActual) {
+        return ChronoUnit.DAYS.between(fechaAnterior, fechaActual);
+    }
+
+    public String puntajePorCategoria(List<Categoria> categorias) {
+        String salida = "";
+
+        for (Categoria c : categorias) {
+            salida += c.getNombre() + ":\n" +
+                      "5 Puntos: " + c.cantidadQuePuntuaronCon(5) + "\n" +
+                      "4 Puntos: " + c.cantidadQuePuntuaronCon(4) + "\n" +
+                      "3 Puntos: " + c.cantidadQuePuntuaronCon(3) + "\n" +
+                      "2 Puntos: " + c.cantidadQuePuntuaronCon(2) + "\n" +
+                      "1 Punto: " + c.cantidadQuePuntuaronCon(1) + "\n";
+        }
+
+        return salida;
+    }
+
+    public String promedioPorCategoria(List<Categoria> categorias) {
+        String salida = "";
+
+        for (Categoria c : categorias) {
+            salida += c.getNombre() + ": " + c.promedio() + "\n";
+        }
+
+        return salida;
+    }
 }
