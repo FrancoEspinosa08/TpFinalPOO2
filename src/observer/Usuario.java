@@ -1,6 +1,6 @@
 package observer;
 
-import java.time.LocalDateTime;
+import java.time.LocalDateTime;	
 import java.util.List;
 import java.util.Random;
 
@@ -9,7 +9,6 @@ import inmuebleYUsuario.Email;
 import inmuebleYUsuario.FormaDePago;
 import inmuebleYUsuario.IInquilino;
 import inmuebleYUsuario.IPropietario;
-import inmuebleYUsuario.Ranking;
 import inmuebleYUsuario.RankingUsuario;
 
 public class Usuario implements IPropietario, IInquilino, IObserver {

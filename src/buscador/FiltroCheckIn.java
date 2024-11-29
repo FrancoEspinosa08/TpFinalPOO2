@@ -10,10 +10,7 @@ public class FiltroCheckIn extends Filtro {
     	return this.filtro(ciudad, checkIn, checkOut, altas);
     }
     
-    @Override
-    public List<Inmueble> filtro(List<Inmueble> inmuebles) {
-        return null;
-    }
+
 
     @Override
     public List<Inmueble> filtro(String ciudad, LocalDateTime checkIn, LocalDateTime checkOut, List<Inmueble> inmuebles) {

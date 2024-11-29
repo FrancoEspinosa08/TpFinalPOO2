@@ -14,8 +14,7 @@ public class Buscador {
     private SitioWeb sitioWeb;
 
     // Constructor
-    public Buscador(Filtro filtro, SitioWeb sitioWeb) {
-        this.filtro = filtro;
+    public Buscador(SitioWeb sitioWeb) {
         this.sitioWeb = sitioWeb;
     }
 
@@ -28,6 +27,9 @@ public class Buscador {
     }
 
     public void addFiltro(Filtro filtro) { // Agrega un filtro para realizar la búsqueda
+    	
+    	//PRECONDICION: El Filtro filtro que se va a agregar no debe ser uno de los filtros obligatorios.
+    	
         this.filtro = filtro;
     }
 

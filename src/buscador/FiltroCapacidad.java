@@ -16,33 +16,22 @@ public class FiltroCapacidad extends Filtro {
     // Método para filtrar los inmuebles según la ciudad, fecha de check-in, check-out y capacidad
     @Override
     public List<Inmueble> filtrar(String ciudad, LocalDateTime checkIn, LocalDateTime checkOut, List<Inmueble> altas) {
-        List<Inmueble> resultado;
+        
+    	List<Inmueble> resultado;
 
-        // Filtra por ciudad
-        resultado = this.filtroCiudad(ciudad, altas);
-
-        // Filtra por fecha de check-in
-        resultado = this.filtroCheckIn(checkIn, resultado);
-
-        // Filtra por fecha de check-out
-        resultado = this.filtroCheckOut(checkOut, resultado);
+        // Aplico los tres filtros obligatorios (ciudad, checkIn y checkOut) a List<Inmueble> altas;
+        resultado = super.filtrosObligatorios(ciudad, checkIn, checkOut, altas);
 
         // Aplica el filtro de capacidad
-        return this.filtro(resultado);
+        return this.filtro(ciudad, checkIn, checkOut, resultado);
     }
 
-    // Método para filtrar los inmuebles según la capacidad
-    @Override
-    public List<Inmueble> filtro(List<Inmueble> inmuebles) {
-        return inmuebles.stream()
-                        .filter(inmueble -> inmueble.getCapacidad() == capacidad) // Filtra por capacidad
-                        .toList();
-    }
-
+ 
 	@Override
-	public List<Inmueble> filtro(String ciudad, LocalDateTime checkIn, LocalDateTime checkOut,
-			List<Inmueble> inmuebles) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Inmueble> filtro(String ciudad, LocalDateTime checkIn, LocalDateTime checkOut,List<Inmueble> inmuebles) {
+		
+		return inmuebles.stream()
+                .filter(inmueble -> inmueble.getCapacidad() == capacidad) // Filtra por capacidad
+                .toList();
 	}
 }

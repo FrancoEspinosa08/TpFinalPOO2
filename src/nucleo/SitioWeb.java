@@ -77,15 +77,16 @@ public class SitioWeb {
 
 	}
 
-	//Reservar previo uso del buscador
-	public void reservar(Usuario usuario, int index){ //Recibe el resultado de la busqueda del buscador (Atributo resultadoBusqueda) y reserva el inmueble que este en la posicion index.
-		//OBS: el parametro usuario es EL inquilino que utiliza este metodo
-
-		Inmueble inmueble = this.getBuscador().getResultadoBusqueda().get(index); // esto es el inmueble que se va a reservar
-
+	//Reservar haciendo uso del buscador
+	public void reservar(Usuario usuario, int index, String ciudad, LocalDateTime checkIn, LocalDateTime checkOut){ 
+		//OBS 1: el parametro usuario es EL inquilino que utiliza este metodo
+		//OBS 2: Se asume que el usuario conoce el "index" del inmueble que quiere reservar
 		
-		//this.logicaDeReserva(reservaPendiente , usuario);		VER!
-		this.logicaDeReserva(inmueble,usuario);
+		Inmueble inmueble = this.getBuscador().buscar(ciudad, checkIn, checkOut).get(index); // esto es el inmueble que se va a reservar
+		
+		Reserva reservaAValidar = new Reserva(usuario, checkIn, checkOut, inmueble); //Reserva que tiene que ser validada por la logica de reserva
+		
+		this.logicaDeReserva(reservaAValidar,usuario);
 		
 	}
 

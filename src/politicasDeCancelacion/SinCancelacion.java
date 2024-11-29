@@ -1,8 +1,7 @@
 package politicasDeCancelacion;
 
-import java.time.LocalDateTime;
+import java.time.LocalDateTime;	
 
-import observer.Inmueble;
 import observer.Reserva;
 
 public class SinCancelacion extends PoliticaDeCancelacion{

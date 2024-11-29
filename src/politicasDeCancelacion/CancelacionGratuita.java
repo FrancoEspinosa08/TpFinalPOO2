@@ -2,8 +2,6 @@ package politicasDeCancelacion;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-
-import observer.Inmueble;
 import observer.Reserva;
 
 public class CancelacionGratuita extends PoliticaDeCancelacion{

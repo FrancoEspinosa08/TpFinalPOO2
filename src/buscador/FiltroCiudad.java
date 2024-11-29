@@ -10,18 +10,14 @@ public class FiltroCiudad extends Filtro {
     	return this.filtro(ciudad, checkIn, checkOut, altas);
     }
 
-    @Override
-    public List<Inmueble> filtro(List<Inmueble> inmuebles) {
-    	return null;
-    }
 
     @Override
     public List<Inmueble> filtro(String ciudad, LocalDateTime checkIn, LocalDateTime checkOut, List<Inmueble> inmuebles) {
         // Redundante aquí, ya que este filtro actúa solo en el atributo ciudad
     	
-    	//SETEAR LOS VALORES CHECKIN CHEK OUT NULL
+    	//SETEAR LOS VALORES CHECKIN CHEK OUT NULL EN EL TEST!!!
     	return inmuebles.stream()
-                .filter(inmueble -> inmueble.getCiudad().equals(ciudad)) // Filtra por ciudad
-                .toList();
+                	    .filter(inmueble -> inmueble.getCiudad().equals(ciudad)) // Filtra por ciudad
+                	    .toList();
     }
 }

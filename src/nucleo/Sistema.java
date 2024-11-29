@@ -1,11 +1,9 @@
 package nucleo;
 
-import java.time.LocalDateTime;
+import java.time.LocalDateTime;	
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
-import administrador.Categoria;
 import observer.Inmueble;
 import observer.Reserva;
 import observer.Usuario;

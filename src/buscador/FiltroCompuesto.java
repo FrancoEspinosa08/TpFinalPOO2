@@ -14,6 +14,8 @@ public class FiltroCompuesto extends Filtro {
         this.filtros = filtros;
     }
     
+    public FiltroCompuesto() {} //No deberia ser este el UNICO constructor? Por que recibe parametros?
+    
     public void addFiltro(Filtro filtro) {
     	this.filtros.add(filtro);
     }
@@ -27,14 +29,8 @@ public class FiltroCompuesto extends Filtro {
     public List<Inmueble> filtrar(String ciudad, LocalDateTime checkIn, LocalDateTime checkOut, List<Inmueble> altas) {
         List<Inmueble> resultado;
 
-        // Filtra los inmuebles por ciudad
-        resultado = this.filtroCiudad(ciudad, altas);
-
-        // Filtra los inmuebles por fecha de check-in
-        resultado = this.filtroCheckIn(checkIn, resultado);
-
-        // Filtra los inmuebles por fecha de check-out
-        resultado = this.filtroCheckOut(checkOut, resultado);
+        // Aplico los tres filtros obligatorios (ciudad, checkIn y checkOut) a List<Inmueble> altas;
+        resultado = super.filtrosObligatorios(ciudad, checkIn, checkOut, altas);
 
         // Aplica los filtros compuestos
         return this.filtro(ciudad, checkIn, checkOut, resultado);
@@ -43,19 +39,16 @@ public class FiltroCompuesto extends Filtro {
     // Método que aplica los filtros compuestos sobre la lista de inmuebles
     @Override
     public List<Inmueble> filtro(String ciudad, LocalDateTime checkIn, LocalDateTime checkOut, List<Inmueble> inmuebles) {
-        List<Inmueble> resultado = new ArrayList<>(inmuebles);
+        
+    	List<Inmueble> resultado = new ArrayList<>(inmuebles); //Copio la lista de inmuebles a una variable
 
-        // Aplica todos los filtros de la lista "filtros"
+        // Aplica todos los filtros de la lista "filtros" a la variable resultado (List<Inmueble>)
         for (Filtro filtro : filtros) {
             resultado = filtro.filtrar(ciudad, checkIn, checkOut, resultado);
         }
 
-        return resultado;
+        return resultado; //Retorno la lista completamente filtrada
     }
 
-	@Override
-	public List<Inmueble> filtro(List<Inmueble> inmuebles) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
 }
