@@ -86,8 +86,8 @@ class SitioWebGestionAdminTest {
 		sistema.addAlta(NoDisponible);
 		sistema.addAlta(disponible);
 		
-		when(NoDisponible.getEsReservado()).thenReturn(true);
-		when(disponible.getEsReservado()).thenReturn(false);
+		when(NoDisponible.esReservado()).thenReturn(true);
+		when(disponible.esReservado()).thenReturn(false);
 	}
 	////////////////////////////// test //////////////////////////
 	
@@ -96,10 +96,10 @@ class SitioWebGestionAdminTest {
 	void testTasaDeOcupacion() {
 		
 		Inmueble NoDisponible01   = mock(Inmueble.class);
-		when(NoDisponible01.getEsReservado()).thenReturn(true);
+		when(NoDisponible01.esReservado()).thenReturn(true);
 		
 		Inmueble NoDisponible02   = mock(Inmueble.class);
-		when(NoDisponible02.getEsReservado()).thenReturn(true);
+		when(NoDisponible02.esReservado()).thenReturn(true);
 		
 		sistema.addAlta(NoDisponible01);
 		sistema.addAlta(NoDisponible02);

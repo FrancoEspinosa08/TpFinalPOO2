@@ -3,6 +3,7 @@ package nucleoTest;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -31,6 +32,7 @@ import nucleo.Sistema;
 import nucleo.SitioWeb;
 import observer.AppMobile;
 import observer.Inmueble;
+import observer.Reserva;
 import observer.Usuario;
 import politicasDeCancelacion.CancelacionGratuita;
 import politicasDeCancelacion.PoliticaDeCancelacion;
@@ -46,28 +48,28 @@ class SitioWebTest {
 	Inmueble quincho     = mock(Inmueble.class);	  // stub
 	
 	
-	//Inmueble "real"
-	/*  Usuario propietario, 
-	 * Usuario inquilinoActivo, 
-	 * int vecesAlquilado, 
-	 * String tipoDeInmueble,
-	 *  int superficie,
-	   String pais,
-	   String ciudad, 
-	   String direccion,
-	   int capacidad,
-	   List<String> fotos,
-	   LocalDateTime horarioCheckIn,
-	   LocalDateTime horarioCheckOut,
-	   FormaDePago formaDePago,
-	   List<String> comentarios,
-	   Ranking ranking, 
-	   List<FormaDePago> formaPagoValidas,
-	   float precioPorDia,
-	   boolean esReservado,
-	   List<Evento> eventos,
-	   PoliticaDeCancelacion politicaDeCancelacion*/
-	//
+	/*Inmueble "real"
+	 * 
+	Usuario propietario,
+	int vecesAlquilado, 
+	String tipoDeInmueble, 
+	int superficie,
+	String pais, 
+	String ciudad,
+	String direccion,
+	int capacidad, 
+	List<String> fotos,
+	LocalDateTime horarioCheckIn,
+	LocalDateTime horarioCheckOut,
+	FormaDePago formaDePago,
+	List<String> comentarios,
+	Ranking ranking,
+	List<FormaDePago> formaPagoValidas,
+	float precioPorDia,
+	List<Evento> eventos,
+	PoliticaDeCancelacion politicaDeCancelacion
+	*/
+	
 	
 	
 	
@@ -111,11 +113,25 @@ class SitioWebTest {
 	
 	List<Inmueble> listaInmueblesBuscador = Arrays.asList(casa, depto);
 	
-	Inmueble inmuebleReal = new Inmueble(Franco, null, 0, "casa",200,
-				"Argentina","BsAs","6474", 10, fotos, 
-				checkIn,checkOut, null , null,
-				rankingInmueble, formaPagoValidas, 1000F,
-				false, null, politicaCancel);
+	
+	
+	Inmueble inmuebleReal = new Inmueble(Franco,        //Usuario propietario
+										0,				//int vecesAlquilado
+										"casa",			//String tipoDeInmueble
+										200,			//int superficie
+										"Argentina",	//String pais
+										"BsAs",			//String ciudad
+										"6474",			//String direccion
+										10,				//int capacidad
+										fotos,			//List<String> fotos
+										checkIn,		//LocalDateTime horarioCheckIn
+										checkOut,		//LocalDateTime horarioCheckOut
+										null,			//List<String> comentarios
+										rankingInmueble,//Ranking ranking
+										formaPagoValidas,//List<FormaDePago> formaPagoValidas
+										1000F,			//float precioPorDia
+										null,			//List<Evento> eventos
+										politicaCancel);//PoliticaDeCancelacion politicaDeCancelacion
 	
 	
 	
@@ -149,11 +165,11 @@ class SitioWebTest {
 		when(quincho.getServicios()).thenReturn(serviciosQuincho);
 		
 		//Buscador
-		when(buscador.getResultadoBusqueda()).thenReturn(listaInmueblesBuscador);
+		when(buscador.buscar("BsAs", checkIn, checkOut)).thenReturn(listaInmueblesBuscador);
 		
 		//Estado de reservas 
-		when(casa.getEsReservado()).thenReturn(false); // Casa es libre
-		when(depto.getEsReservado()).thenReturn(true); // Depto tiene reserva
+		when(casa.esReservado()).thenReturn(false); // Casa es libre
+		when(depto.esReservado()).thenReturn(true); // Depto tiene reserva
 		
 		//Propietarios de inmuebles
 		when(casa.getPropietario()).thenReturn(Franco);
@@ -169,11 +185,29 @@ class SitioWebTest {
 	@Test
 	void testCancelarReserva() {
 		
-		Inmueble inmueble = new Inmueble(Ivan, null, 0, "casa",200,
-										"Argentina","BsAs","6474", 10, fotos, 
-										checkIn,checkOut, null , null,
-										rankingInmueble, formaPagoValidas, 1000F,
-										false, null, politicaCancel);
+		List<String> comentarios = new ArrayList<String>();
+		
+		Inmueble inmueble = new Inmueble(Ivan,
+										0, 
+										"casa",
+										200,
+										"Argentina",
+										"BsAs",
+										"6474",
+										10, 
+										fotos, 
+										checkIn,
+										checkOut,
+										comentarios, 
+										rankingInmueble,
+										formaPagoValidas,
+										1000F,
+										null,
+										politicaCancel);
+											
+		Reserva reserva = new Reserva(Agustin, checkIn, checkIn, inmueble);
+		
+		LocalDateTime fechaCancelacion = LocalDateTime.of(2021, 11, 12, 10, 00); // Año, mes, día, hora, minuto
 		
 		inmueble.attach(Franco);
 		inmueble.attach(Agustin);
@@ -181,17 +215,17 @@ class SitioWebTest {
 		doNothing().when(Franco).actuaSiCancelarReserva(inmueble);
 		doNothing().when(Agustin).actuaSiCancelarReserva(inmueble);
 		
-		// Verifica que se lance una NoSuchElementException cuando se intenta cancelar una reserva en una lista vacía
-        Assertions.assertThrows(NoSuchElementException.class, () -> {
-        	sitioWeb.cancelarReserva(inmueble , LocalDateTime.now());
-        });
-		
-		
-		
-		assertEquals("Se ha cancelado la reserva!" , Ivan.getEmail().getInbox());
-		assertEquals(inmueble ,Ivan.getEmail().getAttachment());
-		
+		// Ejecutar el método a probar
+	    sitioWeb.cancelarReserva(reserva, fechaCancelacion);
 	
+		assertEquals("Se ha cancelado la reserva!" , Ivan.getEmail().getInbox());
+		assertEquals(reserva ,Ivan.getEmail().getAttachment());
+		
+
+	    // Verificar que se llamó a los interesados
+	    verify(Franco, times(1)).actuaSiCancelarReserva(inmueble);
+	    verify(Agustin, times(1)).actuaSiCancelarReserva(inmueble);
+
 	}
 	
 	
@@ -212,26 +246,52 @@ class SitioWebTest {
 	 
 	
 	@Test
-	void testEncolarUsuarioSiElInmuebleEstaReservado() {
+	void testAñadeReservaPendiente() {
 		
-		//Seteamos el buscador para que tenga el inmuebleReal
-		when(casa.getEsReservado()).thenReturn(true);
+		List<String> comentarios = new ArrayList<String>();
 		
-		sitioWeb.reservar(Ivan, casa); //reservar(Usuario usuario, Inmueble inmueble)
+		Inmueble inmueble = new Inmueble(Ivan,
+										0, 
+										"casa",
+										200,
+										"Argentina",
+										"BsAs",
+										"6474",
+										10, 
+										fotos, 
+										checkIn,
+										checkOut,
+										comentarios, 
+										rankingInmueble,
+										formaPagoValidas,
+										1000F,
+										null,
+										politicaCancel);
+											
+		Reserva reserva1 = new Reserva(Agustin, checkIn, checkIn, inmueble);
+		Reserva reserva2 = new Reserva(Ivan, checkIn, checkIn, inmueble);
 		
-		verify(casa).encolarUsuario(Ivan);
+		inmueble.addReservaActiva(reserva1);
+		
+
+		
+		sitioWeb.reservar(Ivan, reserva2); //reservar(Usuario usuario, Reserva reserva)
+		
+		List<Reserva> reservaPendiente = List.of(reserva2);
+		
+		assertEquals(reservaPendiente ,inmueble.getReservasPendientes());
+		
 	}
+	
 	
 	@Test
 	void testNoDebeReservarInmuebleRealCasaAPartirDelBuscador() {
 		
-		//Seteamos el buscador para que tenga el inmuebleReal
-		when(buscador.getResultadoBusqueda()).thenReturn(inmueblesBuscador);
-		
+		//El propietario no aprobara la reserva
 		when(Franco.decidirSiReserva()).thenReturn(false);
 		
 		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-			sitioWeb.reservar(Ivan, 0);  // Llama al método reservar y debe dar una excepción
+			sitioWeb.reservar(Ivan, 0, "BsAs", checkIn, checkOut);  // Llama al método reservar y debe dar una excepción
         });
 		
 		
@@ -241,15 +301,15 @@ class SitioWebTest {
 	
 	@Test
 	void testReservarInmuebleRealCasaAPartirDelBuscador() {
-		
-		//Seteamos el buscador para que tenga el inmuebleReal
-		when(buscador.getResultadoBusqueda()).thenReturn(inmueblesBuscador);
+		//Buscador
+		when(buscador.buscar("BsAs", checkIn, checkOut)).thenReturn(inmueblesBuscador);
 		
 		when(Franco.decidirSiReserva()).thenReturn(true);
 		
-		sitioWeb.reservar(Ivan, 0);
+		sitioWeb.reservar(Ivan, 0, "BsAs", checkIn, checkOut);
 		
-		assertEquals("Su reserva fue aprobada!", Ivan.getEmail().getInbox() );	
+		assertEquals("Su reserva fue aprobada!", Ivan.getEmail().getInbox() );
+		
 	}
 	
 	

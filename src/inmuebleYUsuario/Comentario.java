@@ -3,21 +3,21 @@ package inmuebleYUsuario;
 import java.util.List;
 
 public class Comentario {
-	private List<String> cometarios;
+	private List<String> comentarios;
 
     public Comentario(List<String> cometarios) {
-        this.cometarios = cometarios;
+        this.comentarios = cometarios;
     }
 
-    public List<String> getCometarios() {
-        return cometarios;
+    public List<String> getComentarios() {
+        return comentarios;
     }
 
     public void addComentario(String comentario) {
-        this.cometarios.add(comentario);
+        this.comentarios.add(comentario);
     }
 
-    public void removeCometario(String comentario) {
-        this.cometarios.remove(comentario);
+    public void removeComentario(String comentario) {
+        this.comentarios.remove(comentario);
     }
 }

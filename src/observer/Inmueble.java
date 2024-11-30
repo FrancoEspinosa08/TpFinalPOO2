@@ -38,7 +38,7 @@ public class Inmueble extends Subject {
 	
 	public Inmueble(Usuario propietario, int vecesAlquilado, String tipoDeInmueble, int superficie,
 			String pais, String ciudad, String direccion, int capacidad, List<String> fotos, LocalDateTime horarioCheckIn,
-			LocalDateTime horarioCheckOut, FormaDePago formaDePago, List<String> comentarios,
+			LocalDateTime horarioCheckOut, List<String> comentarios,
 			Ranking ranking, List<FormaDePago> formaPagoValidas, float precioPorDia,
 			List<Evento> eventos, PoliticaDeCancelacion politicaDeCancelacion) {
 		

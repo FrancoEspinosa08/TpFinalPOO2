@@ -36,7 +36,7 @@ public class Sistema {
 	}
 	
 	//Se realiza el checkOut, se puntua y se comenta.
-	public void checkOut(Usuario usuario, Reserva reserva){ 
+	public void checkOut(Usuario usuario, Reserva reserva){ //El usuario es el inquilino de la reserva
 
 		this.puntuarInmueble(reserva.getInmueble(), usuario);
 		this.puntuarPropietario(reserva.getInmueble().getPropietario(), usuario);
