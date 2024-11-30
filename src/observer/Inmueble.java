@@ -91,7 +91,7 @@ public class Inmueble extends Subject {
 	
 	
 	//NUEVO
-	public boolean hayReservaActivaEntre(LocalDateTime In, LocalDateTime Out){
+	public boolean hayReservaActivaEntre(LocalDateTime in, LocalDateTime out){
 		/*
 		 * Un periodo se considera ocupado si 
 		 * 
@@ -101,14 +101,14 @@ public class Inmueble extends Subject {
     	*/
 		
 		return  this.reservasActivas.stream()
-                					.anyMatch(r -> (In.isBefore(r.getCheckOut()) || In.isEqual(r.getCheckOut()))
-                							    && (Out.isAfter(r.getCheckIn()) || Out.isEqual(r.getCheckIn()))
+                					.anyMatch(r -> (in.isBefore(r.getCheckOut()) || in.isEqual(r.getCheckOut()))
+                							    && (out.isAfter(r.getCheckIn()) || out.isEqual(r.getCheckIn()))
                 							 );
 		
 		
 	}
-	//NUEVO --Este metodo a lo mejor no se utilizara VER.
-	public boolean hayReservaPendienteEntre(LocalDateTime In, LocalDateTime Out){
+	
+	public boolean hayReservaPendienteEntre(LocalDateTime in, LocalDateTime out){
 		/*
 		 * Un periodo se considera ocupado si 
 		 * 
@@ -118,8 +118,8 @@ public class Inmueble extends Subject {
     	*/
 		
 		return  this.reservasPendientes.stream()
-                					   .anyMatch(r -> (In.isBefore(r.getCheckOut()) || In.isEqual(r.getCheckOut()))
-                							   	   && (Out.isAfter(r.getCheckIn()) || Out.isEqual(r.getCheckIn()))
+                					   .anyMatch(r -> (in.isBefore(r.getCheckOut()) || in.isEqual(r.getCheckOut()))
+                							   	   && (out.isAfter(r.getCheckIn()) || out.isEqual(r.getCheckIn()))
                 							    );
 		
 		
