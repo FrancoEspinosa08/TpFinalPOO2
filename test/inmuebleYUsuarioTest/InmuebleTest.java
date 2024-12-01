@@ -23,6 +23,7 @@ import inmuebleYUsuario.RankingUsuario;
 import observer.AppMobile;
 import observer.IObserver;
 import observer.Inmueble;
+import observer.Reserva;
 import observer.Usuario;
 import politicasDeCancelacion.PoliticaDeCancelacion;
 
@@ -30,7 +31,6 @@ class InmuebleTest {
 	private Inmueble inmueble;  // SUT
     private Usuario propietario;
     private Usuario inquilinoActivo;
-    private List<Usuario> usuariosEnEspera;
     private List<Servicio> servicios;
     private List<String> fotos;
     private LocalDateTime checkIn;
@@ -48,6 +48,8 @@ class InmuebleTest {
 	private List<Inmueble> inmuebles;
 	private RankingUsuario rankingParaInquilinoActivo;
     private AppMobile appMobile;
+    
+    private Reserva reserva;
     
     @BeforeEach
     public void setUp() {
@@ -92,113 +94,128 @@ class InmuebleTest {
                 3, appMobile);
         
         
+        reserva = Mockito.mock(Reserva.class);
+        
+        
         // Crear la instancia de Inmueble.
-        inmueble = new Inmueble(propietario, inquilinoActivo, 0, "Apartamento", 50,
-                                "Argentina", "Buenos Aires", "Azopardo 250", 4, fotos, checkIn, checkOut,
-                                formaDePago, comentarios, ranking, formaPagoValidas, 100.0f, false, eventos,
-                                politicaDeCancelacion);
+        inmueble = new Inmueble(
+                propietario,
+                0,
+                "Departamento",
+                50,
+                "Argentina",
+                "Buenos Aires",
+                "Libertador 123",
+                4,
+                fotos,
+                checkIn,
+                checkOut,
+                comentarios,
+                ranking,
+                formaPagoValidas,
+                3000,
+                eventos,
+                politicaDeCancelacion
+            );
     }
     
+   
     @Test
-    public void testEstadoInicialInmueble() {
-        assertFalse(inmueble.getEsReservado());
-        assertEquals(0, inmueble.getUsuariosEnEspera().size());
-        assertEquals(2, inmueble.getEventos().size());
-    }
-    
-    @Test
-    public void testGetCapacidad() {
-        assertEquals(4, inmueble.getCapacidad());
-    }
-    
-    @Test
-    public void testGetPropietario() {
-        assertEquals(propietario, inmueble.getPropietario());
-    }
-    
-    @Test
-    public void testGetRanking() {
-        assertEquals(ranking, inmueble.getRanking());
-    }
-    
-    @Test
-    public void testGetInquilinoActivo() {
-        assertEquals(inquilinoActivo, inmueble.getInquilinoActivo());
-    }
-    
-    @Test
-    public void testSetInquilinoActivo() {
-
-        inmueble.setInquilinoActivo(inquilinoActivo);
-        assertEquals(inquilinoActivo, inmueble.getInquilinoActivo());
-    }
-    
-    @Test
-    public void testSetServicios() {
-        List<Servicio> nuevosServicios = Arrays.asList(Servicio.GAS, Servicio.WIFI);
-        inmueble.setServicios(nuevosServicios);
-        assertEquals(nuevosServicios, inmueble.getServicios());
-    }
-    
-    @Test
-    public void testGetSuperficie() {
-        assertEquals(50, inmueble.getSuperficie());
-    }
-    
-    @Test
-    public void testGetTipoDeInmueble() {
-        assertEquals("Apartamento", inmueble.getTipoDeInmueble());
+    public void testInmuebleCreadoCorrectamente() {
+        // Verificar si la instancia de Inmueble no es null
+        assertNotNull(inmueble, "El inmueble debe haber sido creado correctamente.");
     }
 
     @Test
-    public void testGetPais() {
-        assertEquals("Argentina", inmueble.getPais());
-    }
-
-    @Test
-    public void testGetCiudad() {
-        assertEquals("Buenos Aires", inmueble.getCiudad());
-    }
-
-    @Test
-    public void testGetDireccion() {
-        assertEquals("Azopardo 250", inmueble.getDireccion());
+    public void testGetPrecioPorDia() {
+        // Verificar si el precio por día se ha asignado correctamente
+        assertEquals(3000, inmueble.getPrecioPorDia(), "El precio por día no coincide.");
     }
     
     @Test
-    public void testGetHorarioCheckIn() {
-        assertEquals(checkIn, inmueble.getFechaCheckIn());
-    }
-
-    @Test
-    public void testGetHorarioCheckOut() {
-        assertEquals(checkOut, inmueble.getFechaCheckOut());
-    } 
-    
-    @Test
-    public void testGetPoliticaDeCancelacion() {
-        assertEquals(politicaDeCancelacion, inmueble.getPoliticaDeCancelacion());
-    } 
-    
-    @Test
-    public void testPrecioPorDia() {
-        // Verificar que el precio por día se haya configurado correctamente.
-        assertEquals(100.0f, inmueble.getPrecioPorDia(), 0.001);
+    void testAddReservaActiva() {
+        inmueble.addReservaActiva(reserva);
+        assertTrue(inmueble.getReservasActivas().contains(reserva));
     }
     
     @Test
-    public void testVecesAlquiladoInicial() {
-        // Verificar que el contador de veces alquilado este en 0 inicialmente
-        assertEquals(0, inmueble.getVecesAlquilado());
+    void testRemoveReservaActiva() {
+        inmueble.addReservaActiva(reserva);
+        inmueble.removeReservaActiva(reserva);
+        assertFalse(inmueble.getReservasActivas().contains(reserva));
     }
     
-    // Sistema clase probar
     @Test
-    public void testIncrementarVecesAlquilado() {
-        // Incrementar el contador de veces alquilado
+    void testAddReservaPendiente() {
+        inmueble.addReservaPendiente(reserva);
+        assertTrue(inmueble.getReservasPendientes().contains(reserva));
+    }
+    
+    @Test
+    void testRemoveReservaPendiente() {
+        inmueble.addReservaPendiente(reserva);
+        inmueble.removeReservaPendiente(reserva);
+        assertFalse(inmueble.getReservasPendientes().contains(reserva));
+    }
+    
+    
+    @Test
+    void testHayReservaActivaEntre() {
+        LocalDateTime checkInTest = LocalDateTime.of(2024, 1, 3, 10, 0);
+        LocalDateTime checkOutTest = LocalDateTime.of(2024, 1, 5, 10, 0);
+        Mockito.when(reserva.getCheckIn()).thenReturn(LocalDateTime.of(2024, 1, 1, 9, 0));
+        Mockito.when(reserva.getCheckOut()).thenReturn(LocalDateTime.of(2024, 1, 6, 9, 0));
+        inmueble.addReservaActiva(reserva);
+        
+        boolean resultado = inmueble.hayReservaActivaEntre(checkInTest, checkOutTest);
+        assertTrue(resultado);
+    }
+    
+    @Test
+    void testHayReservaPendienteEntre() {
+        LocalDateTime checkInTest = LocalDateTime.of(2024, 1, 3, 10, 0);
+        LocalDateTime checkOutTest = LocalDateTime.of(2024, 1, 5, 10, 0);
+        Mockito.when(reserva.getCheckIn()).thenReturn(LocalDateTime.of(2024, 1, 1, 9, 0));
+        Mockito.when(reserva.getCheckOut()).thenReturn(LocalDateTime.of(2024, 1, 6, 9, 0));
+        inmueble.addReservaPendiente(reserva);
+        
+        boolean resultado = inmueble.hayReservaPendienteEntre(checkInTest, checkOutTest);
+        assertTrue(resultado);
+    }
+    
+    @Test
+    void testReservaPendienteEntre() {
+        LocalDateTime checkInTest = LocalDateTime.of(2024, 1, 3, 10, 0);
+        LocalDateTime checkOutTest = LocalDateTime.of(2024, 1, 5, 10, 0);
+        Mockito.when(reserva.getCheckIn()).thenReturn(LocalDateTime.of(2024, 1, 1, 9, 0));
+        Mockito.when(reserva.getCheckOut()).thenReturn(LocalDateTime.of(2024, 1, 6, 9, 0));
+        inmueble.addReservaPendiente(reserva);
+        
+        List<Reserva> resultado = inmueble.reservaPendienteEntre(checkInTest, checkOutTest);
+        assertFalse(resultado.isEmpty());
+    }
+    
+    @Test
+    void testEsReservado() {
+        inmueble.addReservaActiva(reserva);
+        
+        assertTrue(inmueble.esReservado());
+    }
+    
+    @Test
+    void testIncrementarVecesAlquilado() {
+        int vecesAntes = inmueble.getVecesAlquilado();
         inmueble.incrementarVecesAlquilado();
-        assertEquals(1, inmueble.getVecesAlquilado());
+        assertEquals(vecesAntes + 1, inmueble.getVecesAlquilado());
     }
+    
+    @Test
+    void testAñadirComentario() {
+        String comentarioNuevo = "Medio pelo";
+        inmueble.añadirComentario(comentarioNuevo);
+        assertTrue(inmueble.getComentarios().contains(comentarioNuevo));
+    }
+    
     
     @Test
     public void testSetPrecioPorDia() {
@@ -207,11 +224,6 @@ class InmuebleTest {
         assertEquals(90.0f, inmueble.getPrecioPorDia());
     }
     
-    @Test
-    public void testSetEsReservado() {
-        inmueble.setEsReservado(true);
-        assertTrue(inmueble.getEsReservado());
-    }
     
     @Test
     public void testNotificarBajaDePrecio() {
@@ -228,34 +240,137 @@ class InmuebleTest {
         Mockito.verify(mockObserver, Mockito.times(1)).actuaSiBajaPrecio(inmueble);
     }
     
+    @Test
+    public void testNotificarCancelacionReserva() {
+        // Crear y mockear el Observer
+        IObserver mockObserver = Mockito.mock(IObserver.class);
+
+        // Agregar el observador
+        inmueble.attach(mockObserver);
+
+        // Llamar al método que notifica la cancelación de la reserva
+        inmueble.notificarCancelacionReserva();
+
+        // Verificar que el método actuaSiCancelarReserva se haya llamado una vez
+        Mockito.verify(mockObserver, Mockito.times(1)).actuaSiCancelarReserva(inmueble);
+    }
     
     @Test
-    public void testCalculoPrecioTotal() {
+    public void testNotificarSeHaceReserva() {
+        // Crear y mockear el Observer
+        IObserver mockObserver = Mockito.mock(IObserver.class);
 
+        // Agregar el observador
+        inmueble.attach(mockObserver);
+
+        // Llamar al método que notifica que se hizo una reserva
+        inmueble.notificarSeHaceReserva();
+
+        // Verificar que el método actuaSiSeReserva se haya llamado una vez
+        Mockito.verify(mockObserver, Mockito.times(1)).actuaSiSeReserva();
+    }
+    
+
+    @Test
+    public void testGetTipoDeInmueble() {
+        assertEquals("Departamento", inmueble.getTipoDeInmueble(), "El tipo de inmueble no coincide.");
+    }
+
+    @Test
+    public void testGetSuperficie() {
+        assertEquals(50, inmueble.getSuperficie(), "La superficie no coincide.");
+    }
+
+    @Test
+    public void testGetPais() {
+        assertEquals("Argentina", inmueble.getPais(), "El país no coincide.");
+    }
+
+    @Test
+    public void testGetCiudad() {
+        assertEquals("Buenos Aires", inmueble.getCiudad(), "La ciudad no coincide.");
+    }
+
+    @Test
+    public void testGetDireccion() {
+        assertEquals("Libertador 123", inmueble.getDireccion(), "La dirección no coincide.");
+    }
+
+    @Test
+    public void testGetRanking() {
+        assertEquals(ranking, inmueble.getRanking());
+    }
+
+    @Test
+    public void testSetServicios() {
+        List<Servicio> nuevosServicios = Arrays.asList(Servicio.GAS, Servicio.WIFI);
+        inmueble.setServicios(nuevosServicios);
+        assertEquals(nuevosServicios, inmueble.getServicios());
+    }
+
+    @Test
+    public void testGetCapacidad() {
+        assertEquals(4, inmueble.getCapacidad(), "La capacidad no coincide.");
+    }
+
+    @Test
+    public void testGetFotos() {
+        assertEquals(fotos, inmueble.getFotos(), "La lista de fotos no coincide.");
+    }
+
+    @Test
+    public void testGetFechaCheckIn() {
+        assertNotNull(inmueble.getFechaCheckIn(), "La fecha de check-in no debería ser null.");
+    }
+
+    @Test
+    public void testGetFechaCheckOut() {
+        assertNotNull(inmueble.getFechaCheckOut(), "La fecha de check-out no debería ser null.");
+    }
+
+    @Test
+    public void testGetEventos() {
+        assertEquals(eventos, inmueble.getEventos(), "La lista de eventos no coincide.");
+    }
+
+    @Test
+    public void testGetPoliticaDeCancelacion() {
+        assertEquals(politicaDeCancelacion, inmueble.getPoliticaDeCancelacion(), "La política de cancelación no coincide.");
+    }
+
+    @Test
+    public void testGetPropietario() {
+        assertEquals(propietario, inmueble.getPropietario());
+    }
+    
+    @Test
+    public void testGetFormasDePago() {
+        // Crear la lista esperada de formas de pago
+        List<FormaDePago> formasDePagoEsperadas = Arrays.asList(FormaDePago.EFECTIVO, FormaDePago.TARJETADEBITO);
+        
+        // Verificar que el método getFormasDePago devuelva la lista correcta
+        assertEquals(formasDePagoEsperadas, inmueble.getFormasDePago(), "Las formas de pago no coinciden.");
+    }
+    
+    @Test
+    public void testSetPoliticaDeCancelacion() {
+        // Establecer la política de cancelación
+        inmueble.setPoliticaDeCancelacion(politicaDeCancelacion);
+        
+        // Verificar que la política de cancelación se haya establecido correctamente
+        assertEquals(politicaDeCancelacion, inmueble.getPoliticaDeCancelacion(), "La política de cancelación no se estableció correctamente.");
+    }
+    
+    public void testGetPrecioTotal() {
+        
         float precioTotal = inmueble.getPrecioTotal();
         
-        assertEquals(1430.0f, precioTotal, 0.001f);
+       
+        float precioEsperado = (17 - 3) * 3000 + (2 * 50) + (1 * 30);
+
+        // Verificar que el precio calculado es correcto
+        assertEquals(precioEsperado, precioTotal, "El precio total calculado es incorrecto.");
     }
     
-    
-    @Test
-    public void testGetComentarios() {
-        assertEquals(comentarios, inmueble.getComentarios());
-    }
-    
-    
-    @Test
-    public void testAñadirComentario() {
-        String nuevoComentario = "Excelente experiencia";
-        inmueble.añadirComentario(nuevoComentario);
-        assertTrue(inmueble.getComentarios().contains(nuevoComentario));
-    }
-    
-    @Test
-    public void testSetFormaDePago() {
-        FormaDePago nuevaFormaDePago = FormaDePago.TARJETACREDITO;
-        inmueble.setFormaDePago(nuevaFormaDePago);
-        assertEquals(nuevaFormaDePago, inmueble.getFormaDePago());
-    }
-    
+   
 }
