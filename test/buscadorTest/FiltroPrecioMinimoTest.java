@@ -8,14 +8,12 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import buscador.FiltroPrecioMaximo;
 import buscador.FiltroPrecioMinimo;
+import buscador.Filtro; // Asegúrate de importar la clase Filtro
 import observer.Inmueble;
-
 
 class FiltroPrecioMinimoTest {
     // DOC
@@ -31,11 +29,21 @@ class FiltroPrecioMinimoTest {
 
     @BeforeEach
     void setUp() {
-        filtroPrecioMinimo = new FiltroPrecioMinimo(100);  // Establecemos el precio mínimo en 100
+        // Inicializamos la lista de inmuebles
         inmuebles = new ArrayList<>();
         inmuebles.add(casa);
         inmuebles.add(depto);
         inmuebles.add(quincho);
+
+        // Configuración de filtros obligatorios (por ejemplo, FiltroCiudad, FiltroCheckIn, FiltroCheckOut)
+        List<Filtro> filtrosObligatorios = new ArrayList<>();
+        // Aquí podrías crear e incluir los filtros obligatorios como FiltroCiudad, FiltroCheckIn, FiltroCheckOut
+        // filtrosObligatorios.add(new FiltroCiudad(...));
+        // filtrosObligatorios.add(new FiltroCheckIn(...));
+        // filtrosObligatorios.add(new FiltroCheckOut(...));
+
+        // Inicializamos el filtro con precio mínimo de 100 y los filtros obligatorios
+        filtroPrecioMinimo = new FiltroPrecioMinimo(100.0, filtrosObligatorios);  // Precio mínimo de 100
     }
 
     @Test
@@ -45,8 +53,8 @@ class FiltroPrecioMinimoTest {
         when(depto.getPrecioTotal()).thenReturn((float) 80.0);
         when(quincho.getPrecioTotal()).thenReturn((float) 150.0);
 
-        // Ejecutamos el filtro
-        List<Inmueble> resultado = filtroPrecioMinimo.filtro(inmuebles);
+        // Ejecutamos el filtro por precio mínimo
+        List<Inmueble> resultado = filtroPrecioMinimo.filtro(null, null, null, inmuebles);
 
         // Verificamos que solo los inmuebles con un precio >= 100 estén en el resultado
         assertEquals(2, resultado.size());

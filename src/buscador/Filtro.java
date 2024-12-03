@@ -1,42 +1,29 @@
 package buscador;
-import java.time.LocalDateTime;	
+import java.time.LocalDateTime;	 
 import java.util.List;
 import observer.Inmueble;
 
 public abstract class Filtro {
-	
-	private final Filtro filtroCiudad = new FiltroCiudad();
-	private final Filtro filtroCheckIn = new FiltroCheckIn();
-	private final Filtro filtroCheckOut = new FiltroCheckOut();
+    protected List<Filtro> filtrosObligatorios;
 
-	
-	// Método abstracto que debe ser implementado por las clases que extiendan Filtro
+    // Constructor vacío
+    public Filtro() {}
+
+    // Método abstracto que deben implementar las subclases
     public abstract List<Inmueble> filtrar(String ciudad, LocalDateTime checkIn, LocalDateTime checkOut, List<Inmueble> altas);
     public abstract List<Inmueble> filtro(String ciudad, LocalDateTime checkIn, LocalDateTime checkOut, List<Inmueble> inmuebles);
-    
-    
-     
 
-
+    // Método que aplica todos los filtros obligatorios en orden
     public List<Inmueble> filtrosObligatorios(String ciudad, LocalDateTime checkIn, LocalDateTime checkOut, List<Inmueble> inmuebles) {
-        
-    	List<Inmueble> resultado = this.getFiltroCiudad().filtrar(ciudad , checkIn, checkOut, inmuebles);  // 1ro filtro por ciudad
-        resultado 				 = this.getFiltroCheckIn().filtrar(ciudad , checkIn, checkOut, resultado); // 2do filtro por checkIn
-        resultado 				 = this.getFiltroCheckOut().filtrar(ciudad , checkIn, checkOut, resultado);// 3ro filtro por checkOut
-       
-        return resultado; // Devuelvo la lista completamente filtrada
+        List<Inmueble> resultado = inmuebles;
+        for (Filtro filtro : filtrosObligatorios) {
+            resultado = filtro.filtrar(ciudad, checkIn, checkOut, resultado);
+        }
+        return resultado;
     }
 
-   
-    public Filtro getFiltroCiudad() {
-		return filtroCiudad;
-	}
-
-	public Filtro getFiltroCheckIn() {
-		return filtroCheckIn;
-	}
-
-	public Filtro getFiltroCheckOut() {
-		return filtroCheckOut;
-	}
+    // Setter para los filtros obligatorios
+    public void setFiltrosObligatorios(List<Filtro> filtrosObligatorios) {
+        this.filtrosObligatorios = filtrosObligatorios;
+    }
 }

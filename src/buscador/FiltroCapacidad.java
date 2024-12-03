@@ -5,33 +5,28 @@ import observer.Inmueble;
 
 public class FiltroCapacidad extends Filtro {
 
-    // Atributo
     private int capacidad;
 
-    // Constructor
-    public FiltroCapacidad(int capacidad) {
+    // Constructor que recibe los filtros obligatorios
+    public FiltroCapacidad(int capacidad, List<Filtro> filtrosObligatorios) {
         this.capacidad = capacidad;
+        this.setFiltrosObligatorios(filtrosObligatorios); // Configura los filtros obligatorios
     }
 
-    // Método para filtrar los inmuebles según la ciudad, fecha de check-in, check-out y capacidad
     @Override
-    public List<Inmueble> filtrar(String ciudad, LocalDateTime checkIn, LocalDateTime checkOut, List<Inmueble> altas) {
-        
-    	List<Inmueble> resultado;
+    public List<Inmueble> filtrar(String ciudad, LocalDateTime checkIn, LocalDateTime checkOut, List<Inmueble> inmuebles) {
+        // Aplica los filtros obligatorios antes de aplicar el filtro de capacidad
+        List<Inmueble> resultado = super.filtrosObligatorios(ciudad, checkIn, checkOut, inmuebles);
 
-        // Aplico los tres filtros obligatorios (ciudad, checkIn y checkOut) a List<Inmueble> altas;
-        resultado = super.filtrosObligatorios(ciudad, checkIn, checkOut, altas);
-
-        // Aplica el filtro de capacidad
+        // Luego aplica el filtro específico de capacidad
         return this.filtro(ciudad, checkIn, checkOut, resultado);
     }
 
- 
-	@Override
-	public List<Inmueble> filtro(String ciudad, LocalDateTime checkIn, LocalDateTime checkOut,List<Inmueble> inmuebles) {
-		
-		return inmuebles.stream()
-                .filter(inmueble -> inmueble.getCapacidad() == capacidad) // Filtra por capacidad
+    @Override
+    public List<Inmueble> filtro(String ciudad, LocalDateTime checkIn, LocalDateTime checkOut, List<Inmueble> inmuebles) {
+        // Filtra por capacidad
+        return inmuebles.stream()
+                .filter(inmueble -> inmueble.getCapacidad() == capacidad)
                 .toList();
-	}
+    }
 }
