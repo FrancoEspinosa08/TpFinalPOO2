@@ -128,9 +128,13 @@ public class Inmueble extends Subject {
 	//NUEVO
 	public List<Reserva> reservaPendienteEntre(LocalDateTime checkIn, LocalDateTime checkOut) {
 		
+		/*Filtrar e incluir reservas que:
+		    Comiencen antes de que el rango termine.
+		    Terminen después de que el rango comience.
+		*/
 		return this.getReservasPendientes().stream()
-										   .filter(r -> (checkIn.isBefore(r.getCheckOut()) || checkIn.isEqual(r.getCheckOut()))
-                							   	      && (checkOut.isAfter(r.getCheckIn()) || checkOut.isEqual(r.getCheckIn())))
+										   .filter(r -> (checkIn.isBefore(r.getCheckOut()) || checkIn.isEqual(r.getCheckOut())) // Verifica si la fecha de inicio del rango dado es antes o igual al check-out de la reserva.
+                							   	      && (checkOut.isAfter(r.getCheckIn()) || checkOut.isEqual(r.getCheckIn())))// Verifica si la fecha de fin del rango dado es después o igual al check-in de la reserva.
 										   .toList();
 	}
 	

@@ -114,7 +114,9 @@ public class SitioWeb {
 
 			//Notificamos a los interesados sobre la realizacion de la reserva
 			reserva.getInmueble().notificarSeHaceReserva();
-		
+			
+			//Agregamos la nueva reserva Activa
+			reserva.getInmueble().addReservaActiva(reserva);
 
 		}else{
 			throw new IllegalArgumentException("El propietario ha decidido no aprobar la reserva"); // La reserva no fue aprobada. Excepcion!
@@ -176,7 +178,10 @@ public class SitioWeb {
 	     //Cancelar reserva aplicando politica de cancelacion correspondiente.
 	     reservaACancelar.getInmueble().getPoliticaDeCancelacion().aplicarPenalidad(reservaACancelar, diaDeLaCancelacion);	
 
+	     //Quitamos la reserva de las reservasActivas del inmueble
+	     reservaACancelar.getInmueble().removeReservaActiva(reservaACancelar);
 	     
+	     //Verificamos que haya alguna reservaPendiente entre las fechas de la que fue cancelada
 	     if(reservaACancelar.getInmueble().hayReservaPendienteEntre(reservaACancelar.getCheckIn(), reservaACancelar.getCheckOut())) {
 	    	 
 	    	 Reserva reservaPendiente = reservaACancelar.getInmueble().reservaPendienteEntre(reservaACancelar.getCheckIn(), reservaACancelar.getCheckOut()).getFirst();
@@ -184,6 +189,7 @@ public class SitioWeb {
 	    	//Pasa a reservar el siguiente usuario en la lista de espera
 	    	 this.reservar(reservaPendiente.getInquilino() , reservaPendiente);
 	     }
+	     
 	     
 	     
 	     

@@ -205,7 +205,7 @@ class SitioWebTest {
 										null,
 										politicaCancel);
 											
-		Reserva reserva = new Reserva(Agustin, checkIn, checkIn, inmueble);
+		Reserva reserva = new Reserva(Agustin, checkIn, checkOut, inmueble);
 		
 		LocalDateTime fechaCancelacion = LocalDateTime.of(2021, 11, 12, 10, 00); // Año, mes, día, hora, minuto
 		
@@ -268,8 +268,8 @@ class SitioWebTest {
 										null,
 										politicaCancel);
 											
-		Reserva reserva1 = new Reserva(Agustin, checkIn, checkIn, inmueble);
-		Reserva reserva2 = new Reserva(Ivan, checkIn, checkIn, inmueble);
+		Reserva reserva1 = new Reserva(Agustin, checkIn, checkOut, inmueble);
+		Reserva reserva2 = new Reserva(Ivan, checkIn, checkOut, inmueble);
 		
 		inmueble.addReservaActiva(reserva1);
 		
@@ -283,12 +283,56 @@ class SitioWebTest {
 		
 	}
 	
-	
+	@Test
+	void testHayReservaPendienteYPasaAReservaActiva() {
+		
+
+		List<String> comentarios = new ArrayList<String>();
+		
+		Inmueble inmueble = new Inmueble(Franco,
+										0, 
+										"casa",
+										200,
+										"Argentina",
+										"BsAs",
+										"6474",
+										10, 
+										fotos, 
+										checkIn,
+										checkOut,
+										comentarios, 
+										rankingInmueble,
+										formaPagoValidas,
+										1000F,
+										null,
+										politicaCancel);
+											
+		Reserva reserva1 = new Reserva(Agustin, checkIn, checkOut, inmueble);
+		Reserva reserva2 = new Reserva(Ivan, checkIn, checkOut, inmueble);
+		
+		inmueble.addReservaActiva(reserva1);
+		inmueble.addReservaPendiente(reserva2);
+		
+		when(Franco.decidirSiReserva()).thenReturn(true);
+		when(Franco.getEmail()).thenReturn(email);
+		
+		sitioWeb.cancelarReserva(reserva1, checkIn.minusDays(20));
+		
+		List<Reserva> nuevaReservaActiva = List.of(reserva2);
+		
+		//La reservaPendiente ahora es Activa y la reserva anterior se eliminó.
+		assertEquals(nuevaReservaActiva, inmueble.getReservasActivas()); 
+		
+		
+		
+	}
 	@Test
 	void testNoDebeReservarInmuebleRealCasaAPartirDelBuscador() {
 		
 		//El propietario no aprobara la reserva
 		when(Franco.decidirSiReserva()).thenReturn(false);
+		
+		
 		
 		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
 			sitioWeb.reservar(Ivan, 0, "BsAs", checkIn, checkOut);  // Llama al método reservar y debe dar una excepción

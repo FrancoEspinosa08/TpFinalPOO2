@@ -175,5 +175,14 @@ class SistemaTest {
         assertTrue(inmueble1.getReservasActivas().isEmpty(), "Debería eliminarse la reservaI1 de inmueble1");
         assertTrue(!inmueble2.getReservasActivas().isEmpty(), "Debería permanecer la reservaI2 de inmueble2");
     }
+    
+    @Test
+    void testRemoverAltaDeInmueble2() {
+    	sistema.removeAlta(inmueble2);
+    	
+    	assertEquals(List.of(inmueble1), sistema.getAltas());
+    }
+    
+
 }
 
