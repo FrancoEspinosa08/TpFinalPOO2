@@ -1,8 +1,7 @@
 package buscadorTest;
 
-import static org.junit.jupiter.api.Assertions.*; 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -12,77 +11,67 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import buscador.FiltroCapacidad;
+import buscador.FiltroCheckIn;
+import buscador.FiltroCheckOut;
+import buscador.FiltroCiudad;
 import observer.Inmueble;
 
 class FiltroCapacidadTest {
-	 //DOC
-    Inmueble casa = mock(Inmueble.class);
-    Inmueble depto = mock(Inmueble.class);
-    Inmueble quincho = mock(Inmueble.class);
 
-    // Lista de inmuebles de prueba
-    List<Inmueble> inmuebles;
-
-    // Instancia de FiltroCapacidad
-    FiltroCapacidad filtroCapacidad;
+    private FiltroCapacidad filtroCapacidad;
+    private List<Inmueble> inmuebles;
+    private Inmueble inmueble1;
+    private Inmueble inmueble2;
+    private Inmueble inmueble3;
+    private FiltroCiudad filtroCiudad;
+    private FiltroCheckIn filtroCheckIn;
+    private FiltroCheckOut filtroCheckOut;
 
     @BeforeEach
     void setUp() {
-        filtroCapacidad = new FiltroCapacidad(4);
+        // Configuramos los mocks de los inmuebles
+        inmueble1 = mock(Inmueble.class);
+        inmueble2 = mock(Inmueble.class);
+        inmueble3 = mock(Inmueble.class);
+
+        // Configuramos las capacidades de los inmuebles
+        when(inmueble1.getCapacidad()).thenReturn(4);
+        when(inmueble2.getCapacidad()).thenReturn(2);
+        when(inmueble3.getCapacidad()).thenReturn(4);
+
+        // Creamos la lista de inmuebles
         inmuebles = new ArrayList<>();
-        inmuebles.add(casa);
-        inmuebles.add(depto);
-        inmuebles.add(quincho);
+        inmuebles.add(inmueble1);
+        inmuebles.add(inmueble2);
+        inmuebles.add(inmueble3);
+
+        // Configuración de filtros obligatorios
+        filtroCiudad = mock(FiltroCiudad.class);
+        filtroCheckIn = mock(FiltroCheckIn.class);
+        filtroCheckOut = mock(FiltroCheckOut.class);
+
+        // Configuramos los filtros obligatorios para los inmuebles
+        when(filtroCiudad.filtrar(anyString(), any(), any(), eq(inmuebles))).thenReturn(inmuebles);
+        when(filtroCheckIn.filtrar(anyString(), any(), any(), eq(inmuebles))).thenReturn(inmuebles);
+        when(filtroCheckOut.filtrar(anyString(), any(), any(), eq(inmuebles))).thenReturn(inmuebles);
+
+        // Inicializamos el filtro de capacidad con los filtros obligatorios
+        filtroCapacidad = new FiltroCapacidad(4, List.of(filtroCiudad, filtroCheckIn, filtroCheckOut));
     }
 
     @Test
-    void testFiltroPorCapacidad() {
-        // Configuramos la capacidad de cada inmueble
-        when(casa.getCapacidad()).thenReturn(4);
-        when(depto.getCapacidad()).thenReturn(4);
-        when(quincho.getCapacidad()).thenReturn(2);
-
-        // Ejecutamos el método filtro
-        List<Inmueble> resultado = filtroCapacidad.filtro(inmuebles);
-
-        // Verificamos que solo se incluyan los inmuebles con la capacidad especificada (4)
-        assertEquals(2, resultado.size());
-        assertTrue(resultado.contains(casa));
-        assertTrue(resultado.contains(depto));
-        assertFalse(resultado.contains(quincho));
-    }
-
-    @Test
-    void testFiltrarConCapacidadCiudadYFechas() {
-        // Configuramos los valores de los atributos para los filtros
+    void testFiltrarCapacidad() {
+        // Configuramos los datos de entrada para el filtro
         String ciudad = "Buenos Aires";
-        LocalDateTime checkIn = LocalDateTime.of(2023, 12, 25, 14, 0);
-        LocalDateTime checkOut = LocalDateTime.of(2023, 12, 30, 10, 0);
+        LocalDateTime checkIn = LocalDateTime.now();
+        LocalDateTime checkOut = checkIn.plusDays(3);
 
-        // Configuramos los mocks para cumplir con las condiciones de los filtros
-        when(casa.getCiudad()).thenReturn("Buenos Aires");
-        when(casa.getFechaCheckIn()).thenReturn(checkIn);
-        when(casa.getFechaCheckOut()).thenReturn(checkOut);
-        when(casa.getCapacidad()).thenReturn(4);
-
-        when(depto.getCiudad()).thenReturn("Buenos Aires");
-        when(depto.getFechaCheckIn()).thenReturn(checkIn);
-        when(depto.getFechaCheckOut()).thenReturn(checkOut);
-        when(depto.getCapacidad()).thenReturn(4);
-
-        when(quincho.getCiudad()).thenReturn("Córdoba");
-        when(quincho.getFechaCheckIn()).thenReturn(checkIn);
-        when(quincho.getFechaCheckOut()).thenReturn(checkOut);
-        when(quincho.getCapacidad()).thenReturn(2);
-
-        // Ejecutamos el método filtrar
+        // Ejecutamos el filtro de capacidad
         List<Inmueble> resultado = filtroCapacidad.filtrar(ciudad, checkIn, checkOut, inmuebles);
 
-        // Verificamos el tamaño y el contenido del resultado
+        // Verificamos que solo los inmuebles con capacidad 4 estén en el resultado
         assertEquals(2, resultado.size());
-        assertTrue(resultado.contains(casa));
-        assertTrue(resultado.contains(depto));
-        assertFalse(resultado.contains(quincho));
+        assertEquals(inmueble1, resultado.get(0));
+        assertEquals(inmueble3, resultado.get(1));
     }
-
 }

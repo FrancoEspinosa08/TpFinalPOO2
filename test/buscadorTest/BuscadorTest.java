@@ -30,17 +30,16 @@ class BuscadorTest {
 
 	@BeforeEach
 	void setUp() throws Exception {
-		
-        buscador = new Buscador(inmueblesDisponibles, filtro, trivago);
-        // Agregamos los inmuebles simulados a la lista inmueblesDisponibles
-        inmueblesDisponibles.add(casa);
-        inmueblesDisponibles.add(depto);
-        inmueblesDisponibles.add(quincho);
-        
-     // Configuramos el sistema del sitio web para que devuelva inmueblesDisponibles
-        when(trivago.getSistema()).thenReturn(sistema);
-        when(sistema.getAltas()).thenReturn(inmueblesDisponibles);
-    }
+	    buscador = new Buscador(trivago); // Ajustamos el constructor
+	    // Agregamos los inmuebles simulados a la lista inmueblesDisponibles
+	    inmueblesDisponibles.add(casa);
+	    inmueblesDisponibles.add(depto);
+	    inmueblesDisponibles.add(quincho);
+
+	    // Configuramos el sistema del sitio web para que devuelva inmueblesDisponibles
+	    when(trivago.getSistema()).thenReturn(sistema);
+	    when(sistema.getAltas()).thenReturn(inmueblesDisponibles);
+	}
 
     @Test
     void testPromedioPorCategoria() {
@@ -77,11 +76,14 @@ class BuscadorTest {
         // Configuramos el mock del filtro para que devuelva los inmuebles filtrados
         when(filtro.filtrar(ciudad, checkIn, checkOut, inmueblesDisponibles)).thenReturn(inmueblesFiltrados);
 
+        // Agregamos el filtro al buscador
+        buscador.addFiltro(filtro);
+
         // Ejecutamos el método de búsqueda
-        buscador.buscar(ciudad, checkIn, checkOut);
+        List<Inmueble> resultadoBusqueda = buscador.buscar(ciudad, checkIn, checkOut);
 
         // Verificamos que el resultado de la búsqueda es el esperado
-        assertEquals(inmueblesFiltrados, buscador.getResultadoBusqueda());
+        assertEquals(inmueblesFiltrados, resultadoBusqueda);
 
         // Verificamos que el filtro fue llamado con los parámetros correctos
         verify(filtro).filtrar(ciudad, checkIn, checkOut, inmueblesDisponibles);

@@ -8,12 +8,11 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import buscador.FiltroPrecioMaximo;
+import buscador.Filtro; // Asegúrate de importar la clase Filtro
 import observer.Inmueble;
 
 class FiltroPrecioMaximoTest {
@@ -30,12 +29,23 @@ class FiltroPrecioMaximoTest {
     
     @BeforeEach
     void setUp() {
-        filtroPrecioMaximo = new FiltroPrecioMaximo(150.0);  // Precio máximo de 150
+        // Inicializamos la lista de inmuebles
         inmuebles = new ArrayList<>();
         inmuebles.add(casa);
         inmuebles.add(depto);
         inmuebles.add(quincho);
+
+        // Configuración de filtros obligatorios (por ejemplo, FiltroCiudad, FiltroCheckIn, FiltroCheckOut)
+        List<Filtro> filtrosObligatorios = new ArrayList<>();
+        // Aquí podrías crear e incluir los filtros obligatorios como FiltroCiudad, FiltroCheckIn, FiltroCheckOut
+        // filtrosObligatorios.add(new FiltroCiudad(...));
+        // filtrosObligatorios.add(new FiltroCheckIn(...));
+        // filtrosObligatorios.add(new FiltroCheckOut(...));
+        
+        // Inicializamos el filtro con precio máximo de 150 y los filtros obligatorios
+        filtroPrecioMaximo = new FiltroPrecioMaximo(150.0, filtrosObligatorios);  // Precio máximo de 150
     }
+
     @Test
     void testFiltroPorPrecioMaximo() {
         // Configuramos los precios de cada inmueble
@@ -44,7 +54,7 @@ class FiltroPrecioMaximoTest {
         when(quincho.getPrecioTotal()).thenReturn((float) 150.0); // Precio de 'quincho' = 150
 
         // Ejecutamos el filtro por precio máximo
-        List<Inmueble> resultado = filtroPrecioMaximo.filtro(inmuebles);
+        List<Inmueble> resultado = filtroPrecioMaximo.filtro(null, null, null, inmuebles);
 
         // Verificamos que solo se incluyan los inmuebles con precio <= 150
         assertEquals(2, resultado.size());

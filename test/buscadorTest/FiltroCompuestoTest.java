@@ -4,6 +4,10 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -11,10 +15,6 @@ import buscador.Filtro;
 import buscador.FiltroCompuesto;
 import buscador.FiltroPrecioMaximo;
 import buscador.FiltroPrecioMinimo;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 import observer.Inmueble;
 
@@ -35,9 +35,17 @@ class FiltroCompuestoTest {
 
     @BeforeEach
     void setUp() {
-        // Configuramos los filtros con precios máximos y mínimos
-        filtroPrecioMaximo = new FiltroPrecioMaximo(200.0);  // Filtro con precio máximo de 200
-        filtroPrecioMinimo = new FiltroPrecioMinimo(100.0);  // Filtro con precio mínimo de 100
+        // Filtros obligatorios
+        List<Filtro> filtrosObligatorios = new ArrayList<>();
+        // Estos filtros deberían ser agregados si existen como FiltroCiudad, FiltroCheckIn, FiltroCheckOut
+        // filtrosObligatorios.add(new FiltroCiudad(...));
+        // filtrosObligatorios.add(new FiltroCheckIn(...));
+        // filtrosObligatorios.add(new FiltroCheckOut(...));
+
+        // Filtro con precio máximo de 200
+        filtroPrecioMaximo = new FiltroPrecioMaximo(200.0, filtrosObligatorios);  
+        // Filtro con precio mínimo de 100
+        filtroPrecioMinimo = new FiltroPrecioMinimo(100.0, filtrosObligatorios);  
 
         // Lista de inmuebles
         inmuebles = new ArrayList<>();
@@ -49,9 +57,10 @@ class FiltroCompuestoTest {
         List<Filtro> filtros = new ArrayList<>();
         filtros.add(filtroPrecioMaximo);
         filtros.add(filtroPrecioMinimo);
-        
-        // Asegúrate de pasar filtros de tipo correcto
-        filtroCompuesto = new FiltroCompuesto(filtros);
+        filtros.addAll(filtrosObligatorios);  // Añadimos los filtros obligatorios
+
+        // Instanciamos el FiltroCompuesto
+        filtroCompuesto = new FiltroCompuesto(filtros, filtrosObligatorios);
     }
 
     @Test
@@ -78,14 +87,13 @@ class FiltroCompuestoTest {
         when(quincho.getFechaCheckIn()).thenReturn(checkIn);
         when(quincho.getFechaCheckOut()).thenReturn(checkOut);
 
-        // Ejecutamos el método filtro directamente (sin usar filtrar por ciudad ni fechas)
+        // Ejecutamos el filtro compuesto
         List<Inmueble> resultado = filtroCompuesto.filtro("Buenos Aires", checkIn, checkOut, inmuebles);
 
         // Verificamos que solo los inmuebles que pasan todos los filtros estén en el resultado
         assertEquals(2, resultado.size());  // 'casa' y 'quincho' cumplen con los filtros
-        assertTrue(resultado.contains(casa));
-        assertTrue(resultado.contains(quincho));
+        assertTrue(resultado.contains(casa));  // 'casa' cumple con los filtros
+        assertTrue(resultado.contains(quincho));  // 'quincho' cumple con los filtros
         assertFalse(resultado.contains(depto));  // 'depto' no pasa el filtro de precio máximo
     }
-
 }
