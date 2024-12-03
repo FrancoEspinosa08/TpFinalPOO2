@@ -100,7 +100,7 @@ class UsuarioTest {
 
     @Test
     public void testPuntuar() {
-        Random random = new Random();
+ 
         int puntaje = usuario.puntuar();
         assertTrue(puntaje >= 1 && puntaje <= 5);
     }
@@ -113,9 +113,9 @@ class UsuarioTest {
 
     @Test
     public void testGenerarComentario() {
-        when(comentario.getCometarios()).thenReturn(Arrays.asList("Muy buen alquiler!", "Excelente lugar!", "Recomendable"));
+        when(comentario.getComentarios()).thenReturn(Arrays.asList("Muy buen alquiler!", "Excelente lugar!", "Recomendable"));
         String comentarioGenerado = usuario.generarComentario();
-        assertTrue(comentario.getCometarios().contains(comentarioGenerado));
+        assertTrue(comentario.getComentarios().contains(comentarioGenerado));
     }
 
     @Test
