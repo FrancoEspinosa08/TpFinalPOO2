@@ -13,6 +13,9 @@ import org.junit.jupiter.api.Test;
 
 import buscador.FiltroPrecioMaximo;
 import buscador.Filtro; // Asegúrate de importar la clase Filtro
+import buscador.FiltroCheckIn;
+import buscador.FiltroCheckOut;
+import buscador.FiltroCiudad;
 import observer.Inmueble;
 
 class FiltroPrecioMaximoTest {
@@ -37,10 +40,10 @@ class FiltroPrecioMaximoTest {
 
         // Configuración de filtros obligatorios (por ejemplo, FiltroCiudad, FiltroCheckIn, FiltroCheckOut)
         List<Filtro> filtrosObligatorios = new ArrayList<>();
-        // Aquí podrías crear e incluir los filtros obligatorios como FiltroCiudad, FiltroCheckIn, FiltroCheckOut
-        // filtrosObligatorios.add(new FiltroCiudad(...));
-        // filtrosObligatorios.add(new FiltroCheckIn(...));
-        // filtrosObligatorios.add(new FiltroCheckOut(...));
+      
+        filtrosObligatorios.add(new FiltroCiudad());
+        filtrosObligatorios.add(new FiltroCheckIn());
+        filtrosObligatorios.add(new FiltroCheckOut());
         
         // Inicializamos el filtro con precio máximo de 150 y los filtros obligatorios
         filtroPrecioMaximo = new FiltroPrecioMaximo(150.0, filtrosObligatorios);  // Precio máximo de 150

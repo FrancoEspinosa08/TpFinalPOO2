@@ -12,6 +12,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import buscador.Filtro;
+import buscador.FiltroCheckIn;
+import buscador.FiltroCheckOut;
+import buscador.FiltroCiudad;
 import buscador.FiltroCompuesto;
 import buscador.FiltroPrecioMaximo;
 import buscador.FiltroPrecioMinimo;
@@ -37,10 +40,10 @@ class FiltroCompuestoTest {
     void setUp() {
         // Filtros obligatorios
         List<Filtro> filtrosObligatorios = new ArrayList<>();
-        // Estos filtros deberían ser agregados si existen como FiltroCiudad, FiltroCheckIn, FiltroCheckOut
-        // filtrosObligatorios.add(new FiltroCiudad(...));
-        // filtrosObligatorios.add(new FiltroCheckIn(...));
-        // filtrosObligatorios.add(new FiltroCheckOut(...));
+        
+        filtrosObligatorios.add(new FiltroCiudad());
+        filtrosObligatorios.add(new FiltroCheckIn());
+        filtrosObligatorios.add(new FiltroCheckOut());
 
         // Filtro con precio máximo de 200
         filtroPrecioMaximo = new FiltroPrecioMaximo(200.0, filtrosObligatorios);  
