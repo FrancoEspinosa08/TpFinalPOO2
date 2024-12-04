@@ -22,6 +22,10 @@ class RankingUsuarioTest {
     // DOC
     Categoria categoriaInquilino1 = mock(Categoria.class);
     Categoria categoriaPropietario1 = mock(Categoria.class);
+    
+    //Listas de categorias
+    List<Categoria> catPropietario = new ArrayList<Categoria>();
+    List<Categoria> catInquilino   = new ArrayList<Categoria>();
 
     @BeforeEach
     void setUp() throws Exception {
@@ -33,8 +37,28 @@ class RankingUsuarioTest {
             List.of(categoriaInquilino1),
             List.of(categoriaPropietario1)
         );
+        
+        //Seteamos las listas
+        catPropietario.add(categoriaPropietario1);
+        catInquilino.add(categoriaInquilino1);
     }
 
+    @Test
+    void testSetCategoriasPropietario() {
+    	
+    	rankingUsuario.setCategoriasPropietario(catPropietario);
+    	
+    	assertEquals(catPropietario, rankingUsuario.getCategoriasPropietario());
+    }
+    
+    @Test
+    void testSetCategoriasInquilino() {
+    	
+    	rankingUsuario.setCategoriasInquilino(catInquilino);
+    	
+    	assertEquals(catInquilino, rankingUsuario.getCategoriasInquilino());
+    }
+    
     @Test
     void testPromedioTotal() {
         List<Categoria> todasLasCategorias = new ArrayList<>();
