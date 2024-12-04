@@ -6,11 +6,8 @@ import observer.Inmueble;
 
 public class FiltroCheckOut extends Filtro {
 
-    // Constructor que configura los filtros obligatorios restantes
-    public FiltroCheckOut() {
-        super();
-    }
-
+   
+	
     @Override
     public List<Inmueble> filtrar(String ciudad, LocalDateTime checkIn, LocalDateTime checkOut, List<Inmueble> inmuebles) {
         // Aplica primero los filtros obligatorios

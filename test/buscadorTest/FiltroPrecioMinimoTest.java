@@ -13,6 +13,9 @@ import org.junit.jupiter.api.Test;
 
 import buscador.FiltroPrecioMinimo;
 import buscador.Filtro; // Asegúrate de importar la clase Filtro
+import buscador.FiltroCheckIn;
+import buscador.FiltroCheckOut;
+import buscador.FiltroCiudad;
 import observer.Inmueble;
 
 class FiltroPrecioMinimoTest {
@@ -23,7 +26,10 @@ class FiltroPrecioMinimoTest {
 
     // Lista de inmuebles de prueba
     List<Inmueble> inmuebles;
-
+    
+    // Configuración de filtros obligatorios (por ejemplo, FiltroCiudad, FiltroCheckIn, FiltroCheckOut)
+    List<Filtro> filtrosObligatorios = new ArrayList<>();
+    
     // SUT
     FiltroPrecioMinimo filtroPrecioMinimo;
 
@@ -35,17 +41,21 @@ class FiltroPrecioMinimoTest {
         inmuebles.add(depto);
         inmuebles.add(quincho);
 
-        // Configuración de filtros obligatorios (por ejemplo, FiltroCiudad, FiltroCheckIn, FiltroCheckOut)
-        List<Filtro> filtrosObligatorios = new ArrayList<>();
-        // Aquí podrías crear e incluir los filtros obligatorios como FiltroCiudad, FiltroCheckIn, FiltroCheckOut
-        // filtrosObligatorios.add(new FiltroCiudad(...));
-        // filtrosObligatorios.add(new FiltroCheckIn(...));
-        // filtrosObligatorios.add(new FiltroCheckOut(...));
+        //Seteamos los filtros obligatorios
+        filtrosObligatorios.add(new FiltroCiudad());
+        filtrosObligatorios.add(new FiltroCheckIn());
+        filtrosObligatorios.add(new FiltroCheckOut());
 
         // Inicializamos el filtro con precio mínimo de 100 y los filtros obligatorios
         filtroPrecioMinimo = new FiltroPrecioMinimo(100.0, filtrosObligatorios);  // Precio mínimo de 100
     }
-
+    
+    @Test
+    void testSeSetearonLosFiltrosObligatorios() {
+    	assertEquals(filtrosObligatorios, filtroPrecioMinimo.getFiltrosObligatorios());
+    }
+    
+    
     @Test
     void testFiltroPorPrecioMinimo() {
         // Configuramos el precio de cada inmueble
@@ -63,8 +73,12 @@ class FiltroPrecioMinimoTest {
         assertTrue(resultado.contains(quincho));  // Quincho tiene un precio >= 100
     }
 
+    
     @Test
     void testFiltrarConPrecioMinimoYCiudad() {
+    	// Configura los filtros obligatorios
+        filtroPrecioMinimo.setFiltrosObligatorios(filtrosObligatorios);
+        
         // Configuramos los atributos de los filtros
         String ciudad = "Buenos Aires";
         LocalDateTime checkIn = LocalDateTime.of(2023, 12, 25, 14, 0);
@@ -86,6 +100,8 @@ class FiltroPrecioMinimoTest {
         when(quincho.getFechaCheckOut()).thenReturn(checkOut);
         when(quincho.getPrecioTotal()).thenReturn((float) 150.0);
         
+       // filtroPrecioMinimo.setFiltrosObligatorios(filtrosObligatorios);
+        
         // Ejecutamos el método filtrar
         List<Inmueble> resultado = filtroPrecioMinimo.filtrar(ciudad, checkIn, checkOut, inmuebles);
 
@@ -95,4 +111,5 @@ class FiltroPrecioMinimoTest {
         assertFalse(resultado.contains(depto));  // Departamento no cumple (precio < 100)
         assertTrue(resultado.contains(quincho));  // Quincho cumple con precio >= 100
     }
+    
 }
