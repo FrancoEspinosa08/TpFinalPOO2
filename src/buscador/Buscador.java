@@ -78,7 +78,7 @@ public class Buscador {
                "<----------Información del dueño---------->\n" +
                "Nombre: " + inmueble.getPropietario().getNombre() + "\n" +
                "Teléfono: " + inmueble.getPropietario().getTelefono() + "\n" +
-               "Email: " + inmueble.getPropietario().getEmail() + "\n" +
+               "Email: " + inmueble.getPropietario().getEmail().toString() + "\n" +
                "Puntajes por categoría: " + this.puntajePorCategoria(inmueble.getPropietario().getRanking().getCategoriasPropietario()) + "\n" +
                "Promedio por categoría: " + this.promedioPorCategoria(inmueble.getPropietario().getRanking().getCategoriasPropietario()) + "\n" +
                "Antigüedad: " + this.antiguedad(inmueble.getPropietario().getFechaDeInscripcion(), LocalDateTime.now()) + "\n" +

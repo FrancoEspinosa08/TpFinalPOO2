@@ -3,6 +3,7 @@ package inmuebleYUsuarioTest;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -118,7 +119,23 @@ class InmuebleTest {
                 politicaDeCancelacion
             );
     }
-    
+  
+    @Test
+    public void testGetPrecioTotal() {
+        
+        float precioTotal = inmueble.getPrecioTotal();
+        
+        Duration duracion = Duration.between(inmueble.getFechaCheckIn(), inmueble.getFechaCheckOut());
+        
+        // Obtener la cantidad de días
+        long dias = duracion.toDays();
+       
+        float precioEsperado = 13 * 3000 + 100 + 30; 
+        		//16 * 3000 + (2 * 50) + (1 * 30);
+
+        // Verificar que el precio calculado es correcto
+        assertEquals(precioEsperado, precioTotal, "El precio total calculado es incorrecto.");
+    }
    
     @Test
     public void testInmuebleCreadoCorrectamente() {
@@ -361,16 +378,7 @@ class InmuebleTest {
         assertEquals(politicaDeCancelacion, inmueble.getPoliticaDeCancelacion(), "La política de cancelación no se estableció correctamente.");
     }
     
-    public void testGetPrecioTotal() {
-        
-        float precioTotal = inmueble.getPrecioTotal();
-        
-       
-        float precioEsperado = (17 - 3) * 3000 + (2 * 50) + (1 * 30);
-
-        // Verificar que el precio calculado es correcto
-        assertEquals(precioEsperado, precioTotal, "El precio total calculado es incorrecto.");
-    }
+   
     
    
 }

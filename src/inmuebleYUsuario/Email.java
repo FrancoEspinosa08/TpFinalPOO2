@@ -31,4 +31,10 @@ public class Email {
     public void setAttachment(Reserva attachment) {
         this.attachment = attachment;
     }
+    
+    
+    @Override
+    public String toString() {
+        return "email";
+    }
 }

@@ -17,21 +17,30 @@ class RankingInmuebleTest {
 
     // SUT (System Under Test)
     RankingInmueble ranking;
+    
+    List<Categoria> categorias; 
 
     @BeforeEach
     void setUp() throws Exception {
         // Inicializamos las categorías de prueba con puntajes simulados, EN ESTE CASO NO USO MOCKITO PORQUE LAS CATEGORIAS TIENEN UNA
     	// IMPLEMENTACION SENCILLA.
-        List<Categoria> categorias = List.of(
-            new CategoriaInmuebleEstado(List.of(5, 4, 4, 3, 5, 2)),
-            new CategoriaInmueblePrecio(List.of(4, 4, 3, 3, 4, 5)),
-            new CategoriaInmuebleUbicacion(List.of(3, 3, 3, 4, 4, 5))
-        );
+    		categorias = List.of(
+						            new CategoriaInmuebleEstado(List.of(5, 4, 4, 3, 5, 2)),
+						            new CategoriaInmueblePrecio(List.of(4, 4, 3, 3, 4, 5)),
+						            new CategoriaInmuebleUbicacion(List.of(3, 3, 3, 4, 4, 5))
+    							);
 
         // Creamos un objeto de RankingInmueble
         ranking = new RankingInmueble(categorias);
     }
-
+    /*
+    @Test
+    void testGetCategoriasInmueble() {
+    	
+    	assertEquals(categorias, ranking.getCategoriasInmueble());
+    }*/
+    
+    
     @Test
     void testPromedioTotal() {
         // Calculamos el puntaje total promedio

@@ -23,6 +23,27 @@ class EventoTest {
     }
 
     @Test
+    void testGetFechaInicio() {
+
+    	assertEquals(LocalDateTime.of(2024, 11, 1, 10, 0), evento.getFechaInicio());
+    }
+    
+    @Test
+    void testGetFechaFin() {
+
+    	assertEquals(LocalDateTime.of(2024, 11, 5, 10, 0), evento.getFechaFin());
+    }
+    
+    
+    @Test
+    void testGetNombre() {
+    	
+    	assertEquals("Carnaval", evento.getNombre());
+    }
+    
+    
+    
+    @Test
     void testCalcularPrecioTotal() {
         float resultado = evento.calcularPrecioTotal();
         
