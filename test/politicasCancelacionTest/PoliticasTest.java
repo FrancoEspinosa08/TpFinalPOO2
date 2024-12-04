@@ -30,9 +30,43 @@ class PoliticasTest {
 		when(reserva.getInmueble()).thenReturn(inmueble);
 		when(reserva.getCheckIn()).thenReturn(LocalDateTime.of(2024, 12, 3, 0, 0));
 		when(inmueble.getPrecioPorDia()).thenReturn((float) 10);
+		when(inmueble.getPrecioTotal()).thenReturn((float) 100);
 		
 	}
-
+	
+	@Test
+	void testMenosDeDiezDiasAntelacion() {
+		
+		LocalDateTime diaCancelacion = LocalDateTime.of(2024, 12, 1, 0, 0);
+		
+		assertEquals(100, intermedia.aplicarPenalidad(reserva, diaCancelacion));
+	}
+	
+	@Test
+	void testEntreDiezYVeinteDiasAntelacion() {
+		
+		LocalDateTime diaCancelacion = LocalDateTime.of(2024, 11, 21, 0, 0);
+		
+		assertEquals(50, intermedia.aplicarPenalidad(reserva, diaCancelacion));
+	}
+	
+	@Test
+	void testIntermediaMasDeVeinteDiasDeAntelacion() {
+		
+		LocalDateTime diaCancelacion = LocalDateTime.of(2023, 12, 2, 0, 0);
+		
+		assertEquals(0, intermedia.aplicarPenalidad(reserva, diaCancelacion));
+	}
+	
+	
+	@Test
+	void testSinCancelacion() {
+		
+		LocalDateTime diaCancelacion = LocalDateTime.of(2023, 12, 2, 0, 0);
+		
+		assertEquals(100, sinCancelacion.aplicarPenalidad(reserva, diaCancelacion));
+	}
+	
 	@Test
 	void testCancelacionGratuitaEsCero() {
 		
