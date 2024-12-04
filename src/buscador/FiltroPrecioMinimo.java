@@ -12,7 +12,7 @@ public class FiltroPrecioMinimo extends Filtro {
     // Constructor
     public FiltroPrecioMinimo(double precioMinimo, List<Filtro> filtrosObligatorios) {
         this.precioMinimo = precioMinimo;
-        this.setFiltrosObligatorios(filtrosObligatorios); // Configura los filtros obligatorios
+        super.setFiltrosObligatorios(filtrosObligatorios); // Configura los filtros obligatorios
     }
 
     // Método para filtrar los inmuebles según la ciudad, fecha de check-in, check-out y precio mínimo
