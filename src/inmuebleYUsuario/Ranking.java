@@ -8,7 +8,26 @@ public abstract class Ranking {
 	
     // Devuelve el puntaje promedio de todas las categorías juntas (único puntaje)
     public double promedioTotal(List<Categoria> categorias) {
-        // Suma todos los puntajes de las categorías
+     // Verifica si hay puntajes para evitar división por cero
+        long totalPuntajes = categorias.stream()
+    	            				   .flatMap(cat -> cat.getPuntaje().stream()) // Obtener todos los puntajes en un solo flujo
+    	            				   .count();
+
+    	if (totalPuntajes == 0) {
+    	    return 0.0; // Si no hay puntajes, devuelve 0 como promedio
+    	}
+
+     // Suma todos los puntajes
+    	double puntajeTotal = categorias.stream()
+    	            					.flatMap(cat -> cat.getPuntaje().stream())
+    	            					.mapToInt(Integer::intValue)
+    	            					.sum();
+
+     // Calcula el promedio como un valor double
+    	return puntajeTotal / totalPuntajes; 
+    	
+    	
+    	/*// Suma todos los puntajes de las categorías
     	double puntajeTotal = categorias.stream()
     		    .flatMap(cat -> cat.getPuntaje().stream()) // Aplanar todas las listas en un solo flujo de Integer
     		    .mapToInt(Integer::intValue)               // Convertir cada Integer a int
@@ -20,6 +39,7 @@ public abstract class Ranking {
                 .count();
         
     	return puntajeTotal / totalPuntajes;
+    	*/
     }
   
     // Implementación común para la clase base
