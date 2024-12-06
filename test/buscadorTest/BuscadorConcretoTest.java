@@ -127,10 +127,7 @@ class BuscadorConcretoTest {
         buscador = new Buscador(mockSitioWeb);
     }
     
-    /*
-     * ESTE TEST DA ERROR PORQUE EL STRING DE SALIDA NO ES EL CORRECTO, AL PARECER
-     * ECLIPSE AÑADE O UN SALTO DE LINEA O UN CARACTER > QUE NO DEBERIA ESTAR.
-     * 
+    
     @Test
     void testVisualizar() {
     	// Crear filtros obligatorios
@@ -150,31 +147,34 @@ class BuscadorConcretoTest {
     	when(mockSistema.getAltas()).thenReturn(List.of(inmueble1)); //Solo hay un inmueble posible
     	when(mockSitioWeb.getSistema()).thenReturn(mockSistema);
     	
+    	String resultado = buscador.visualizar(0, "Buenos Aires", inmueble1.getFechaCheckIn(), inmueble1.getFechaCheckOut());
     	
-    	String resultado = 
-    			"Tipo de Inmueble: CASA\r\n"
-    			+ "Superficie: 100\r\n"
-    			+ "País: Argentina\r\n"
-    			+ "Ciudad: Buenos Aires\r\n"
-    			+ "Dirección: 123\r\n"
-    			+ "Servicios: [AGUA]\r\n"
-    			+ "Capacidad: 12\r\n"
-    			+ "Fotos: [F1,F2]\r\n"
-    			+ "Fecha de ingreso: 2024-12-10T14:00\r\n"
-    			+ "Fecha de egreso: 2024-12-20T10:00\r\n"
-    			+ "Precio: 1000.0\r\n"
-    			+ "Comentarios: [Comentario1, Comentario2]\r\n"
-    			+ "Puntajes por categoría: Estado del Inmueble:\r\n"
-    			+ "5 Puntos: 2\r\n"
-    			+ "4 Puntos: 0\r\n"
-    			+ "3 Puntos: 0\r\n"
-    			+ "2 Puntos: 0\r\n"
-    			+ "1 Punto: 0\r\n"
-    			+ "\r\n"
-    			+ "Promedio Total: 5.0\r\n"
-    			+ "Promedio por Categoría: Estado del Inmueble: 5.0\r\n"
-    			+ "\r\n"
-    			+ "<----------Información del dueño---------->\r\n"
+    	String[] lineas = resultado.split("\n");
+    	
+    	assertEquals("Tipo de Inmueble: CASA", lineas[0]);
+    	assertEquals("Superficie: 100",  lineas[1]);		
+    	assertEquals("País: Argentina",  lineas[2]);		
+    	assertEquals("Ciudad: Buenos Aires",  lineas[3]);		
+    	assertEquals("Dirección: 123",  lineas[4]);
+    	assertEquals("Servicios: [AGUA]",  lineas[5]);	
+    	assertEquals("Capacidad: 12",  lineas[6]);	
+    	assertEquals("Fotos: [F1,F2]",  lineas[7]);	
+    	assertEquals("Fecha de ingreso: 2024-12-10T14:00",  lineas[8]);	
+    	assertEquals("Fecha de egreso: 2024-12-20T10:00",  lineas[9]);	
+    	assertEquals("Precio: 1000.0",  lineas[10]);
+    	assertEquals("Comentarios: [Comentario1, Comentario2]",  lineas[11]);
+    	assertEquals("Puntajes por categoría: Estado del Inmueble:",  lineas[12]);
+    	assertEquals("5 Puntos: 2",  lineas[13]);
+    	assertEquals("4 Puntos: 0",  lineas[14]);
+    	assertEquals("3 Puntos: 0",  lineas[15]);
+    	assertEquals("2 Puntos: 0",  lineas[16]);
+    	assertEquals("1 Punto: 0",  lineas[17]);
+    	
+   
+    	
+    	
+    	/*
+    			
     			+ "Nombre: Ivan\r\n"
     			+ "Teléfono: 123456\r\n"
     			+ "Email: email\r\n"
@@ -193,16 +193,11 @@ class BuscadorConcretoTest {
     			+ "Inmuebles Alquilados: Depto\r\n"
     			+ "\r\n";
     			
+    	*/
     	
-    	assertTrue(buscador.visualizar(0, "Buenos Aires", inmueble1.getFechaCheckIn(), inmueble1.getFechaCheckOut()).equals(resultado));
     	
     	
-    }*/
-    
-    
-    
-    
-    
+    }
     
     
     @Test

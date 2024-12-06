@@ -220,6 +220,14 @@ class InmuebleTest {
     }
     
     @Test
+    void testNoEsReservado() {
+        inmueble.addReservaActiva(reserva);
+        inmueble.removeReservaActiva(reserva);
+        
+        assertFalse(inmueble.esReservado());
+    }
+    
+    @Test
     void testIncrementarVecesAlquilado() {
         int vecesAntes = inmueble.getVecesAlquilado();
         inmueble.incrementarVecesAlquilado();
@@ -241,6 +249,12 @@ class InmuebleTest {
         assertEquals(90.0f, inmueble.getPrecioPorDia());
     }
     
+    @Test
+    public void testSetMayorPrecioPorDia() {
+        // Verificar el comportamiento del setter para precioPorDia.
+        inmueble.setPrecioPorDia(90000.0f);
+        assertEquals(90000.0f, inmueble.getPrecioPorDia());
+    }
     
     @Test
     public void testNotificarBajaDePrecio() {
@@ -251,6 +265,7 @@ class InmuebleTest {
         inmueble.attach(mockObserver);
 
         // Cambia el precio y salta el mensaje actuaSiBajaPrecio
+        
         inmueble.setPrecioPorDia(90.0f);
 
         // Verificar que el método actuaSiBajaPrecio se llame.
